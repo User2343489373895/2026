@@ -30,6 +30,41 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+# --- NUOVA FUNZIONE FUOCHI D'ARTIFICIO ---
+def show_fireworks():
+    # JavaScript per lanciare fuochi dai due angoli bassi
+    components.html(
+        """
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <script>
+            var end = Date.now() + (60 * 1000); // Durata 60 secondi
+            var colors = ['#ff00ff', '#00ffff', '#ffffff', '#ff00aa'];
+
+            (function frame() {
+              confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0, y: 1 }, // Angolo basso Sinistra
+                colors: colors
+              });
+              confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1, y: 1 }, // Angolo basso Destra
+                colors: colors
+              });
+
+              if (Date.now() < end) {
+                requestAnimationFrame(frame);
+              }
+            }());
+        </script>
+        """,
+        height=0,
+    )
+
 def play_audio(file_name):
     if os.path.exists(file_name):
         with open(file_name, "rb") as f:
@@ -53,7 +88,6 @@ def start_cyber_rain():
 if 'state' not in st.session_state:
     st.session_state.state = 'login'
 
-# Creiamo un contenitore unico che copre tutta l'app
 placeholder = st.empty()
 
 # FASE 1: LOGIN
@@ -68,7 +102,7 @@ if st.session_state.state == 'login':
         if st.button("BYPASS FIREWALL"):
             if pwd.lower().strip() == "locandieri":
                 st.session_state.state = 'hacking'
-                placeholder.empty() # CANCELLA TUTTO IL LOGIN
+                placeholder.empty()
                 st.rerun()
             else:
                 st.error("ACCESS DENIED: Firewall is holding strong.")
@@ -97,14 +131,15 @@ elif st.session_state.state == 'hacking':
             time.sleep(delay)
         
         st.session_state.state = 'party'
-        placeholder.empty() # CANCELLA TUTTI I LOG
+        placeholder.empty()
         st.rerun()
 
 # FASE 3: PARTY FINALE
 elif st.session_state.state == 'party':
     with placeholder.container():
         start_cyber_rain()
-        play_audio("musica.mp3") # <--- Ding Ding Dong qui
+        show_fireworks() # <--- RICHIESTA FUOCHI D'ARTIFICIO
+        play_audio("musica.mp3")
 
         st.markdown("""
             <div style='text-align: center;'>

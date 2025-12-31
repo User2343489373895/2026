@@ -18,7 +18,7 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS GLOBALE DEFINITIVO ---
+# --- CSS GLOBALE OTTIMIZZATO ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
@@ -26,65 +26,70 @@ st.markdown("""
     .stApp { background-color: #050505 !important; overflow-x: hidden; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Container per allineamento perfetto titoli */
+    /* Riduzione spazi Header iniziale */
     .header-container {
         text-align: center;
         width: 100%;
-        margin-bottom: 20px;
+        margin: 0 auto 10px auto;
+        padding: 0;
     }
 
     .pink-neon { 
         color: #ff00ff; 
         text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
         font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(20px, 8vw, 55px); 
+        font-size: clamp(20px, 8vw, 60px); 
         font-weight: 900; 
-        margin: 0;
-        line-height: 1.1;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 1;
     }
 
     .cyan-sub {
         color: #00ffff;
         text-shadow: 0 0 8px #00ffff;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(12px, 3.5vw, 20px);
+        font-size: clamp(10px, 3.5vw, 18px);
         font-weight: bold;
-        margin: 5px 0 0 0;
+        margin: -5px 0 0 0 !important; /* Margine negativo per avvicinarlo sopra */
         letter-spacing: 2px;
         text-transform: uppercase;
     }
 
-    /* Titolo 2026 UNLOCKED - Massiccio su Desktop */
+    /* Titolo 2026 UNLOCKED - Estremamente responsivo e gigante su Desktop */
     .unlocked-title {
         color: white; 
         font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(28px, 12vw, 120px); 
-        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
+        /* Aumentata la scala: min 35px, ideale 15vw, max 180px */
+        font-size: clamp(35px, 15vw, 180px); 
+        text-shadow: 0 0 20px #ff00ff, 0 0 50px #ff00ff;
         text-align: center;
-        margin: 20px 0;
-        line-height: 1;
+        margin: 10px 0 0 0 !important;
+        padding: 0 !important;
+        line-height: 0.9;
+        white-space: nowrap;
     }
 
-    /* Box Successo Personalizzato */
+    /* Box Successo - Avvicinato al titolo sopra */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
         color: #00ff41;
         border-radius: 10px;
-        padding: 20px;
+        padding: clamp(15px, 4vw, 25px);
         text-align: center;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(16px, 5vw, 32px);
+        font-size: clamp(18px, 5vw, 35px);
         font-weight: bold;
         text-shadow: 0 0 15px #00ff41;
-        margin: 20px auto;
+        margin: -10px auto 20px auto !important; /* Margine negativo superiore per eliminare lo spazio */
         width: 100%;
     }
 
     .terminal-text {
         font-family: 'Fira Code', monospace; 
         color: #00ff41; 
-        font-size: clamp(13px, 3vw, 16px); /* Ingrandito per mobile */
+        font-size: clamp(13px, 3.2vw, 16px);
         background: rgba(0, 255, 65, 0.1); 
         padding: 12px; 
         border-left: 3px solid #00ff41; 
@@ -166,7 +171,6 @@ def main():
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
-            # TITOLI RAGGRUPPATI PER CENTRATURA PERFETTA
             st.markdown("""
                 <div class='header-container'>
                     <h1 class='pink-neon'>THE BACKDOOR</h1>
@@ -218,7 +222,6 @@ def main():
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # TITOLO MASSICCIO
             st.markdown("<h1 class='unlocked-title'>2026 UNLOCKED</h1>", unsafe_allow_html=True)
             
             st.markdown("""

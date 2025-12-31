@@ -5,7 +5,7 @@ import base64
 import random
 import streamlit.components.v1 as components
 
-# 1. Configurazione (Deve essere la prima)
+# 1. Configurazione
 st.set_page_config(page_title="Exclusive VIP Lounge 💎", page_icon="🔞", layout="centered")
 
 # --- CACHE AUDIO ---
@@ -18,24 +18,16 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS DEFINITIVO E CORRETTO ---
+# --- CSS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
     
-    /* App Background & Scroll */
-    .stApp { background-color: #050505 !important; }
+    .stApp { background-color: #050505 !important; overflow-x: hidden; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Contenitore Testi Centrati */
-    .center-box {
-        text-align: center;
-        width: 100%;
-        display: block;
-        margin: 0 auto;
-    }
+    .center-box { text-align: center; width: 100%; margin: 0 auto; }
 
-    /* THE BACKDOOR & OVERRIDING (PINK) */
     .pink-neon { 
         color: #ff00ff; 
         text-shadow: 0 0 15px #ff00ff; 
@@ -43,34 +35,32 @@ st.markdown("""
         font-size: clamp(24px, 8vw, 60px); 
         font-weight: 900; 
         line-height: 1.2;
-        margin-bottom: 5px;
-        word-wrap: break-word;
     }
 
-    /* SECURE VIP ENTRANCE (CYAN) */
     .cyan-sub {
         color: #00ffff;
         text-shadow: 0 0 8px #00ffff;
         font-family: 'Orbitron', sans-serif;
         font-size: clamp(14px, 4vw, 22px);
         font-weight: bold;
-        letter-spacing: 2px;
         text-transform: uppercase;
-        margin-top: 0;
     }
 
-    /* 2026 UNLOCKED - GIGANTE SU DESKTOP */
+    /* FIX MIRATO: 2026 UNLOCKED */
     .unlocked-title {
         color: white; 
         font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(35px, 15vw, 160px); 
-        text-shadow: 0 0 20px #ff00ff, 0 0 50px #ff00ff;
-        line-height: 1;
+        /* Ricalibrato: min 28px per mobile, max 100px per desktop */
+        font-size: clamp(28px, 9vw, 100px); 
+        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
+        line-height: 1.1;
         margin: 20px 0;
         text-align: center;
+        width: 100%;
+        word-wrap: break-word; /* Permette di andare a capo su schermi stretti */
+        overflow-wrap: break-word;
     }
 
-    /* BOX BUON ANNO - FULL WIDTH */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
@@ -94,10 +84,8 @@ st.markdown("""
         padding: 12px; 
         border-left: 3px solid #00ff41; 
         margin-bottom: 5px;
-        text-align: left;
     }
 
-    /* Background FX */
     .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
     .bit { position: absolute; top: -30px; font-family: monospace; font-size: 18px; animation: fall linear infinite; }
     @keyframes fall { to { transform: translateY(110vh); } }
@@ -106,8 +94,6 @@ st.markdown("""
         background-color: transparent !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
         font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 10px #ff00ff; height: 50px;
     }
-
-    /* Fireworks Canvas Fix */
     #fCanvasContainer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 5; }
     </style>
     """, unsafe_allow_html=True)
@@ -163,30 +149,27 @@ def show_party_visuals():
         ps.forEach((p,i)=>{p.up();p.draw();if(p.l<=0)ps.splice(i,1);});
         requestAnimationFrame(anim);
     } anim();
-    </script>""", height=0) # Height 0 per non occupare spazio ma JS gira in overlay
+    </script>""", height=0)
 
 # --- LOGICA APPLICAZIONE ---
 def main():
     if 'state' not in st.session_state:
         st.session_state.state = 'login'
 
-    # Placeholder unico per cancellazione totale
     main_placeholder = st.empty()
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
             st.markdown("<div class='center-box'><div class='pink-neon'>THE BACKDOOR</div><div class='cyan-sub'>SECURE VIP ENTRANCE</div></div>", unsafe_allow_html=True)
-            
             c1, c2, c3 = st.columns([0.05, 0.9, 0.05])
             with c2:
                 st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
-            
             play_audio("scena1.mp3", loop=True)
             pwd = st.text_input("ACCESS KEY:", type="password", key="p_in")
             if st.button("AUTHORIZE ENTRANCE"):
                 if pwd.lower().strip() == "locandieri":
                     st.session_state.state = 'hacking'
-                    main_placeholder.empty() # Pulisce tutto prima del rerun
+                    main_placeholder.empty()
                     st.rerun()
                 else: st.error("ACCESS DENIED")
 
@@ -217,21 +200,15 @@ def main():
         with main_placeholder.container():
             play_audio("musica.mp3", loop=False)
             show_party_visuals()
-            
-            # Immagine ASCII Sopra
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # Titolo Unlocked Gigante
-            st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
+            # Scritta 2026 UNLOCKED sistemata
+            st.markdown("<h1 class='unlocked-title'>2026 UNLOCKED</h1>", unsafe_allow_html=True)
             
-            # Box Buon Anno Full Width
             st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
-            
-            # Foto Finale
             if os.path.exists("foto.png"): 
                 st.image("foto.png", use_container_width=True)
-            
             if st.button("TERMINATE CONNECTION"):
                 st.session_state.state = 'login'
                 main_placeholder.empty()

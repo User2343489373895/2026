@@ -5,7 +5,7 @@ import base64
 import random
 import streamlit.components.v1 as components
 
-# 1. Configurazione
+# 1. Configurazione (Deve essere la prima)
 st.set_page_config(page_title="Exclusive VIP Lounge 💎", page_icon="🔞", layout="centered")
 
 # --- CACHE AUDIO ---
@@ -18,7 +18,7 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS GLOBALE AGGIORNATO (STILE PREMIUM) ---
+# --- CSS DEFINITIVO ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
@@ -26,16 +26,15 @@ st.markdown("""
     .stApp { background-color: #050505 !important; overflow-x: hidden; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Login Titles */
+    /* Titoli Login */
     .pink-neon { 
         color: #ff00ff; 
-        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 40px #ff00ff; 
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
         font-family: 'Orbitron', sans-serif; 
         text-align: center; 
         font-size: clamp(28px, 8vw, 60px); 
         font-weight: 900; 
         margin-bottom: 5px;
-        line-height: 1.1;
     }
 
     .cyan-sub {
@@ -45,45 +44,48 @@ st.markdown("""
         text-align: center;
         font-size: clamp(12px, 3.5vw, 20px);
         font-weight: bold;
-        letter-spacing: 4px;
+        letter-spacing: 3px;
         text-transform: uppercase;
     }
 
-    /* 2026 UNLOCKED - EFFETTO GLOW PULSANTE */
+    /* 2026 UNLOCKED - GIGANTE E PULSANTE */
     .unlocked-title {
         color: white; 
         font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(40px, 12vw, 110px); 
+        font-size: clamp(45px, 15vw, 120px); 
         font-weight: 900;
         text-align: center;
-        margin: 20px 0;
+        margin: 10px 0;
         line-height: 1;
-        text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 70px #ff00ff;
+        text-shadow: 0 0 10px #fff, 0 0 30px #ff00ff, 0 0 50px #ff00ff;
         animation: pulse 2s infinite alternate;
+        position: relative;
+        z-index: 10;
     }
 
     @keyframes pulse {
-        from { transform: scale(1); text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 40px #ff00ff; }
-        to { transform: scale(1.05); text-shadow: 0 0 20px #fff, 0 0 40px #ff00ff, 0 0 60px #ff00ff, 0 0 100px #ff00ff; }
+        from { transform: scale(1); text-shadow: 0 0 10px #fff, 0 0 30px #ff00ff; }
+        to { transform: scale(1.05); text-shadow: 0 0 20px #fff, 0 0 50px #ff00ff, 0 0 80px #ff00ff; }
     }
 
-    /* BOX BUON ANNO - LOOK INSEGNA NEON */
+    /* BOX BUON ANNO - FULL WIDTH NO WRAP */
     .custom-success-box {
-        background: rgba(0, 255, 65, 0.05);
+        background: rgba(0, 255, 65, 0.1);
         border: 3px solid #00ff41;
-        box-shadow: 0 0 15px rgba(0, 255, 65, 0.4), inset 0 0 15px rgba(0, 255, 65, 0.2);
+        box-shadow: 0 0 20px #00ff41;
         color: #00ff41;
         border-radius: 15px;
         padding: 20px;
         text-align: center;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(18px, 5vw, 40px);
+        font-size: clamp(18px, 6vw, 42px);
         font-weight: 900;
-        text-shadow: 0 0 10px #00ff41;
-        margin: 30px auto;
+        text-shadow: 0 0 15px #00ff41;
+        margin: 20px auto;
         width: 100%;
         white-space: nowrap;
-        letter-spacing: 2px;
+        position: relative;
+        z-index: 10;
     }
 
     .terminal-text {
@@ -91,20 +93,16 @@ st.markdown("""
         background: rgba(0, 255, 65, 0.05); padding: 15px; border-left: 4px solid #00ff41; margin-bottom: 8px;
     }
 
-    /* Background Effects */
-    .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.25; }
+    /* Matrix Rain */
+    .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.2; }
     .bit { position: absolute; top: -30px; font-family: monospace; animation: fall linear infinite; }
     @keyframes fall { to { transform: translateY(110vh); } }
     
     div.stButton > button {
-        background-color: rgba(255, 0, 255, 0.1) !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
-        font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 15px #ff00ff; height: 55px;
-        font-weight: bold; font-size: 18px; transition: 0.3s;
+        background-color: transparent !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
+        font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 15px #ff00ff; height: 50px;
+        font-weight: bold;
     }
-    div.stButton > button:hover { background-color: #ff00ff !important; color: white !important; }
-
-    /* Canvas Fireworks */
-    #f { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 5; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -116,23 +114,27 @@ def play_audio(file_name, loop=False):
         components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
 
 def show_party_visuals():
+    # Pioggia Matrix di emoji
     chars = ["0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
     rain_html = '<div class="matrix-rain">'
-    for i in range(40):
-        left = i * 2.5
-        rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; font-size:{random.randint(15,25)}px; animation-duration:{random.uniform(2,6)}s;">{random.choice(chars)}</div>'
+    for i in range(30):
+        left = i * 3.3
+        rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; font-size:20px; animation-duration:{random.uniform(2,5)}s;">{random.choice(chars)}</div>'
     st.markdown(rain_html + '</div>', unsafe_allow_html=True)
     
+    # Fuochi d'Artificio (Height=0 per rimuovere lo spazio bianco)
     components.html("""
-    <canvas id="f"></canvas>
+    <canvas id="f" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:5;"></canvas>
     <script>
     const c=document.getElementById('f'), ctx=c.getContext('2d');
-    c.width=window.innerWidth; c.height=window.innerHeight;
+    function resize() { c.width=window.innerWidth; c.height=window.innerHeight; }
+    window.addEventListener('resize', resize); resize();
+    
     let particles=[], fireworks=[];
     class Particle {
         constructor(x,y,color,sx,sy){this.x=x;this.y=y;this.color=color;this.sx=sx;this.sy=sy;this.life=1.0;}
         draw(){ctx.globalAlpha=this.life; ctx.fillStyle=this.color; ctx.beginPath(); ctx.arc(this.x,this.y,2.5,0,Math.PI*2); ctx.fill();}
-        update(){this.x+=this.sx;this.y+=this.sy;this.sy+=0.07;this.life-=0.015;}
+        update(){this.x+=this.sx;this.y+=this.sy;this.sy+=0.07;this.life-=0.02;}
     }
     class Firework {
         constructor(){
@@ -145,7 +147,7 @@ def show_party_visuals():
             this.x+=this.sx; this.y+=this.sy; this.sy+=0.12;
             if(this.sy>=-0.5){
                 this.ex=true;
-                for(let i=0;i<45;i++){
+                for(let i=0;i<40;i++){
                     const ang=Math.random()*Math.PI*2, spd=Math.random()*6+2;
                     particles.push(new Particle(this.x,this.y,this.color,Math.cos(ang)*spd,Math.sin(ang)*spd));
                 }
@@ -154,14 +156,14 @@ def show_party_visuals():
     }
     function anim(){
         ctx.clearRect(0,0,c.width,c.height);
-        if(Math.random()<0.05) fireworks.push(new Firework());
+        if(Math.random()<0.04) fireworks.push(new Firework());
         fireworks.forEach((f,i)=>{f.update();f.draw();if(f.ex)fireworks.splice(i,1);});
         particles.forEach((p,i)=>{p.update();p.draw();if(p.life<=0)particles.splice(i,1);});
         requestAnimationFrame(anim);
     } anim();
-    </script>""", height=1000)
+    </script>""", height=0)
 
-# --- MAIN LOGIC ---
+# --- LOGICA ---
 def main():
     if 'state' not in st.session_state:
         st.session_state.state = 'login'
@@ -170,13 +172,9 @@ def main():
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
-            st.markdown("<h1 class='pink-neon'>THE BACKDOOR</h1>", unsafe_allow_html=True)
-            st.markdown("<p class='cyan-sub'>SECURE VIP ENTRANCE</p>", unsafe_allow_html=True)
-            
-            c1, c2, c3 = st.columns([0.05, 0.9, 0.05])
-            with c2:
-                st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
-            
+            st.markdown("<div class='pink-neon'>THE BACKDOOR</div>", unsafe_allow_html=True)
+            st.markdown("<div class='cyan-sub'>SECURE VIP ENTRANCE</div>", unsafe_allow_html=True)
+            st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
             play_audio("scena1.mp3", loop=True)
             pwd = st.text_input("ACCESS KEY:", type="password", key="p_in")
             if st.button("AUTHORIZE ENTRANCE"):
@@ -189,7 +187,7 @@ def main():
     elif st.session_state.state == 'hacking':
         with main_placeholder.container():
             play_audio("scena2.mp3", loop=False)
-            st.markdown("<h2 class='pink-neon'>OVERRIDING SERVER...</h2>", unsafe_allow_html=True)
+            st.markdown("<div class='pink-neon'>OVERRIDING VIP SERVER...</div>", unsafe_allow_html=True)
             log_area = st.empty()
             full_log = ""
             steps = [
@@ -210,29 +208,24 @@ def main():
             st.rerun()
 
     elif st.session_state.state == 'party':
+        # Qui vengono chiamati gli effetti (ora non occupano spazio)
+        show_party_visuals()
+        
         with main_placeholder.container():
             play_audio("musica.mp3", loop=True)
-            show_party_visuals()
             
-            # 1. ASCII
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # 2. TITOLO 2026 (GRANDE E PULSANTE)
-            st.markdown("<h1 class='unlocked-title'>2026 UNLOCKED</h1>", unsafe_allow_html=True)
+            # Titolo Gigante
+            st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
             
-            # 3. BOX BUON ANNO (NEON)
-            st.markdown("""
-                <div class="custom-success-box">
-                    🥂 BUON ANNO, LOCANDIERI! 🥂
-                </div>
-                """, unsafe_allow_html=True)
+            # Box Buon Anno
+            st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
             
-            # 4. FOTO FINALE
             if os.path.exists("foto.png"): 
                 st.image("foto.png", use_container_width=True)
             
-            st.markdown("<br>", unsafe_allow_html=True)
             if st.button("TERMINATE CONNECTION"):
                 st.session_state.state = 'login'
                 main_placeholder.empty()

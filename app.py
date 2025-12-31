@@ -26,22 +26,23 @@ st.markdown("""
     header, footer, #MainMenu {visibility: hidden;}
     
     .neon-text { font-family: 'Orbitron', sans-serif; color: #00ffff; text-shadow: 0 0 10px #00ffff; text-align: center; }
-    .pink-neon { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; font-family: 'Orbitron', sans-serif; text-align: center; font-size: 42px; font-weight: 900; }
+    .pink-neon { color: #ff00ff; text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; font-family: 'Orbitron', sans-serif; text-align: center; font-size: 42px; font-weight: 900; margin-bottom: 0px;}
     
-    /* Stile per il Box di Successo Personalizzato */
+    /* Stile per il Box di Successo Personalizzato (Centratura Matematica) */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
         color: #00ff41;
         border-radius: 10px;
-        padding: 25px;
+        padding: 30px;
         text-align: center;
         font-family: 'Orbitron', sans-serif;
-        font-size: 30px;
+        font-size: 35px; /* Ingrandito */
         font-weight: bold;
         text-shadow: 0 0 15px #00ff41;
-        margin: 20px 0;
+        margin: 25px auto;
         width: 100%;
+        display: block;
     }
 
     .terminal-text {
@@ -69,7 +70,7 @@ def play_audio(file_name, loop=False):
         components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
 
 def show_party_visuals():
-    chars = ["$", "0", "1", "🥂", "✨", "💎", "🍑", "2", "0", "2", "6"]
+    chars = ["$", "0", "1", "🥂", "✨", "💎", "🍑" , "2", "0", "2", "6"]
     rain_html = '<div class="matrix-rain">'
     for i in range(50):
         left = i * 2
@@ -123,9 +124,9 @@ def main():
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
-            # Inversione Colori e Font Originale Orbitron
+            # Titolo Pink e Sottotitolo Cyan centrati
             st.markdown("<h1 class='pink-neon'>THE BACKDOOR</h1>", unsafe_allow_html=True)
-            st.markdown("<p style='color:#00ffff; text-align:center; font-family:\"Orbitron\", sans-serif; font-size: 18px; font-weight: bold; text-shadow: 0 0 8px #00ffff;'>SECURE VIP ENTRANCE</p>", unsafe_allow_html=True)
+            st.markdown("<p style='color:#00ffff; text-align:center; font-family:Orbitron; font-size: 18px; font-weight: bold; text-shadow: 0 0 8px #00ffff; margin-top: 10px;'>SECURE VIP ENTRANCE</p>", unsafe_allow_html=True)
             
             c1, c2, c3 = st.columns([1, 2, 1])
             with c2:
@@ -146,7 +147,16 @@ def main():
             st.markdown("<h2 class='pink-neon'>OVERRIDING VIP SERVER...</h2>", unsafe_allow_html=True)
             log_area = st.empty()
             full_log = ""
-            steps = [("> Initializing 'Seductive_Handshake' protocol...", 1.2), ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5), ("> Deep Packet Inspection of 'Private_Area'...", 1.8), (> "Escalating privileges: Root granted.", 1.5), ("> Extracting 'Secret_Payload.bin'...", 2.0), ("> SUCCESS: Access granted.", 1.0), ("> WELCOME!", 1.2)]
+            # FIX: Simbolo > inserito correttamente nelle stringhe
+            steps = [
+                ("> Initializing 'Seductive_Handshake' protocol...", 1.2), 
+                ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5), 
+                ("> Deep Packet Inspection of 'Private_Area'...", 1.8), 
+                ("> Escalating privileges: Root granted.", 1.5), 
+                ("> Extracting 'Secret_Payload.bin'...", 2.0), 
+                ("> SUCCESS: Access granted.", 1.0), 
+                ("> WELCOME!", 1.2)
+            ]
             for text, delay in steps:
                 full_log += f"<div class='terminal-text'>{text}</div>"
                 log_area.markdown(full_log, unsafe_allow_html=True)
@@ -164,7 +174,7 @@ def main():
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # --- NUOVO BOX DI SUCCESSO PERSONALIZZATO (Centrato e Ingrandito)
+            # Box di Successo HTML (Centratura perfetta e Font Orbitron)
             st.markdown("""
                 <div class="custom-success-box">
                     🥂 BUON ANNO, LOCANDIERI! 🥂
@@ -181,4 +191,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

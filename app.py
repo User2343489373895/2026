@@ -5,8 +5,8 @@ import base64
 import random
 import streamlit.components.v1 as components
 
-# 1. Configurazione (Deve essere la prima)
-st.set_page_config(page_title="Exclusive VIP Lounge 2026 💎", page_icon="🔞", layout="centered")
+# 1. Configurazione Iniziale
+st.set_page_config(page_title="Exclusive VIP Lounge 2026", page_icon="🔞", layout="centered")
 
 # --- CACHE AUDIO ---
 @st.cache_data
@@ -18,225 +18,145 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS DEFINITIVO ---
+# --- CSS GLOBALE ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
     
-    /* App Background */
-    .stApp { background-color: #050505 !important; overflow: hidden; }
+    .stApp { background-color: #050505 !important; }
     header, footer, #MainMenu {visibility: hidden;}
-    
-    /* Contenitore Testi Centrati */
-    .center-box {
-        text-align: center;
-        width: 100%;
-        z-index: 10;
-        position: relative;
-    }
 
-    /* THE BACKDOOR (PINK) */
+    /* Box Titoli */
     .pink-neon { 
         color: #ff00ff; 
-        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff; 
+        text-shadow: 0 0 15px #ff00ff; 
         font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(24px, 8vw, 60px); 
+        font-size: clamp(22px, 6vw, 50px); 
         font-weight: 900; 
-        margin-bottom: 5px;
+        text-align: center;
+        margin-bottom: 10px;
     }
 
-    /* 2026 UNLOCKED - GLOW ANIMATION */
+    /* 2026 UNLOCKED - Ridimensionato per non rompere il layout */
     .unlocked-title {
-        color: #ffffff; 
+        color: white; 
         font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(40px, 15vw, 120px); 
+        font-size: clamp(30px, 10vw, 75px); 
+        text-shadow: 0 0 20px #ff00ff;
+        text-align: center;
         font-weight: 900;
-        text-transform: uppercase;
-        text-align: center;
-        line-height: 0.9;
-        margin: 20px 0;
-        z-index: 10;
-        position: relative;
-        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #00ffff;
-        animation: pulse 2s infinite alternate;
+        margin: 10px 0;
+        line-height: 1.2;
     }
 
-    @keyframes pulse {
-        from { transform: scale(1); text-shadow: 0 0 20px #ff00ff; }
-        to { transform: scale(1.05); text-shadow: 0 0 40px #ff00ff, 0 0 70px #00ffff; }
-    }
-
-    /* BOX BUON ANNO - NEON GREEN */
+    /* BOX BUON ANNO - Più largo e font adattivo per stare su una riga */
     .custom-success-box {
-        background: rgba(0, 255, 65, 0.1);
-        border: 3px solid #00ff41;
-        box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        background-color: rgba(0, 255, 65, 0.15);
+        border: 2px solid #00ff41;
         color: #00ff41;
-        border-radius: 15px;
-        padding: 25px;
+        border-radius: 8px;
+        padding: 15px;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(20px, 6vw, 45px);
+        font-size: clamp(14px, 4vw, 28px);
         font-weight: bold;
+        text-shadow: 0 0 10px #00ff41;
+        width: 100%;
         text-align: center;
-        margin: 30px 0;
-        z-index: 10;
-        position: relative;
-        text-transform: uppercase;
-        letter-spacing: 3px;
+        white-space: nowrap; /* Impedisce di andare a capo */
+        margin: 20px 0;
     }
 
     .terminal-text {
         font-family: 'Fira Code', monospace; 
         color: #00ff41; 
         font-size: 14px;
-        background: rgba(0, 0, 0, 0.7); 
-        padding: 10px; 
+        background: rgba(0, 255, 65, 0.05); 
+        padding: 8px; 
         border-left: 3px solid #00ff41; 
         margin-bottom: 5px;
-    }
-
-    /* Fireworks Canvas Full Screen */
-    #fCanvasContainer {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 1; /* Sotto i testi ma sopra il fondo */
-        pointer-events: none;
-    }
-    
-    div.stButton > button {
-        background-color: rgba(255, 0, 255, 0.1) !important; 
-        color: #ff00ff !important; 
-        border: 2px solid #ff00ff !important;
-        font-family: 'Orbitron', sans-serif !important; 
-        width: 100%; 
-        box-shadow: 0 0 15px #ff00ff;
-        transition: 0.3s;
-    }
-    div.stButton > button:hover {
-        background-color: #ff00ff !important;
-        color: white !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- FUNZIONI CORE ---
-def play_audio(file_name, loop=False):
-    b64 = get_audio_b64(file_name)
-    if b64:
-        loop_attr = "loop" if loop else ""
-        components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
-
-def show_party_visuals():
-    # Matrix rain di simboli party
+# --- EFFETTI VISIVI (Solo per la fase Party) ---
+def show_fireworks_and_rain():
+    # Matrix rain di simboli
     chars = ["0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
-    rain_html = '<div style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2; opacity:0.4;">'
-    for i in range(25):
-        left = random.randint(0, 100)
-        dur = random.uniform(2, 6)
-        rain_html += f'<div style="position:absolute; left:{left}%; top:-50px; color:#ff00ff; font-family:monospace; font-size:24px; animation: fall {dur}s linear infinite;">{random.choice(chars)}</div>'
+    rain_html = '<div style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; opacity:0.3;">'
+    for i in range(20):
+        left = i * 5
+        rain_html += f'<div style="position:absolute; left:{left}%; top:-50px; color:#ff00ff; font-size:20px; animation: fall {random.uniform(2,5)}s linear infinite;">{random.choice(chars)}</div>'
     st.markdown(rain_html + '</div><style>@keyframes fall { to { transform: translateY(110vh); } }</style>', unsafe_allow_html=True)
     
-    # Fireworks Javascript
+    # Fuochi d'artificio JS (Canvas Overlay)
     components.html("""
-    <div id="fCanvasContainer"><canvas id="canvas"></canvas></div>
+    <canvas id="f" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:999;"></canvas>
     <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particles = [];
-    let fireworks = [];
+    const c = document.getElementById('f');
+    const x = c.getContext('2d');
+    let w = c.width = window.innerWidth;
+    let h = c.height = window.innerHeight;
+    let dots = [];
 
     class Firework {
         constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = canvas.height;
-            this.sx = Math.random() * 3 - 1.5;
-            this.sy = Math.random() * -3 - 7; // Velocità verso l'alto
-            this.size = 3;
-            this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-            this.done = false;
+            this.x = Math.random() * w;
+            this.y = h;
+            this.targetY = Math.random() * (h/2);
+            this.speed = Math.random() * 3 + 5;
+            this.color = `hsl(${Math.random()*360}, 100%, 50%)`;
+            this.exploded = false;
         }
         update() {
-            this.x += this.sx;
-            this.y += this.sy;
-            this.sy += 0.1; // Gravità
-            if (this.sy >= -1) { // Esplosione al culmine
-                this.explode();
-                this.done = true;
+            if(!this.exploded) {
+                this.y -= this.speed;
+                if(this.y <= this.targetY) {
+                    this.exploded = true;
+                    this.createParticles();
+                }
             }
         }
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        explode() {
-            for (let i = 0; i < 50; i++) {
-                particles.push(new Particle(this.x, this.y, this.color));
+        createParticles() {
+            for(let i=0; i<30; i++) {
+                dots.push(new Particle(this.x, this.y, this.color));
             }
         }
     }
 
     class Particle {
-        constructor(x, y, color) {
-            this.x = x;
-            this.y = y;
-            this.color = color;
-            this.angle = Math.random() * Math.PI * 2;
-            this.speed = Math.random() * 6 + 2;
-            this.friction = 0.95;
-            this.gravity = 0.1;
+        constructor(x,y,color) {
+            this.x = x; this.y = y; this.color = color;
+            this.vx = Math.random() * 4 - 2;
+            this.vy = Math.random() * 4 - 2;
             this.alpha = 1;
-            this.decay = Math.random() * 0.015 + 0.015;
         }
         update() {
-            this.speed *= this.friction;
-            this.x += Math.cos(this.angle) * this.speed;
-            this.y += Math.sin(this.angle) * this.speed + this.gravity;
-            this.alpha -= this.decay;
-        }
-        draw() {
-            ctx.globalAlpha = this.alpha;
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-            ctx.fill();
+            this.x += this.vx; this.y += this.vy;
+            this.vy += 0.05; this.alpha -= 0.02;
         }
     }
 
-    function animate() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        if (Math.random() < 0.05) fireworks.push(new Firework());
-
-        fireworks.forEach((fw, i) => {
-            fw.update();
-            fw.draw();
-            if (fw.done) fireworks.splice(i, 1);
+    let fws = [];
+    function anim() {
+        x.clearRect(0,0,w,h);
+        if(Math.random() < 0.05) fws.push(new Firework());
+        fws.forEach((f,i) => {
+            f.update();
+            x.fillStyle = f.color;
+            if(!f.exploded) x.fillRect(f.x, f.y, 3, 3);
+            else fws.splice(i,1);
         });
-
-        particles.forEach((p, i) => {
-            p.update();
-            p.draw();
-            if (p.alpha <= 0) particles.splice(i, 1);
+        dots.forEach((d,i) => {
+            d.update();
+            x.globalAlpha = d.alpha;
+            x.fillStyle = d.color;
+            x.fillRect(d.x, d.y, 2, 2);
+            if(d.alpha <= 0) dots.splice(i,1);
         });
-
-        requestAnimationFrame(animate);
+        requestAnimationFrame(anim);
     }
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-    animate();
+    anim();
     </script>
-    <style>#fCanvasContainer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }</style>
     """, height=0)
 
 # --- LOGICA APPLICAZIONE ---
@@ -244,16 +164,16 @@ def main():
     if 'state' not in st.session_state:
         st.session_state.state = 'login'
 
-    main_placeholder = st.empty()
+    # Placeholder principale per evitare sovrapposizioni
+    placeholder = st.empty()
 
     if st.session_state.state == 'login':
-        with main_placeholder.container():
-            st.markdown("<div class='center-box'><div class='pink-neon'>THE BACKDOOR</div><div style='color:#00ffff; font-family:Orbitron; letter-spacing:3px;'>SECURE VIP ENTRANCE</div></div>", unsafe_allow_html=True)
-            
+        with placeholder.container():
+            st.markdown("<div class='pink-neon'>THE BACKDOOR</div>", unsafe_allow_html=True)
             st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
             
             play_audio("scena1.mp3", loop=True)
-            pwd = st.text_input("ACCESS KEY:", type="password")
+            pwd = st.text_input("ACCESS KEY:", type="password", key="login_pwd")
             if st.button("AUTHORIZE ENTRANCE"):
                 if pwd.lower().strip() == "locandieri":
                     st.session_state.state = 'hacking'
@@ -261,12 +181,11 @@ def main():
                 else: st.error("ACCESS DENIED")
 
     elif st.session_state.state == 'hacking':
-        with main_placeholder.container():
-            play_audio("scena2.mp3", loop=False)
-            st.markdown("<div class='center-box'><div class='pink-neon'>OVERRIDING VIP SERVER...</div></div>", unsafe_allow_html=True)
+        with placeholder.container():
+            play_audio("scena2.mp3")
+            st.markdown("<div class='pink-neon'>OVERRIDING SYSTEM...</div>", unsafe_allow_html=True)
             log_area = st.empty()
-            full_log = ""
-            steps = [
+            lines = [
                 ("> Initializing 'Seductive_Handshake' protocol...", 1.2), 
                 ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5), 
                 ("> Deep Packet Inspection of 'Private_Area'...", 1.8), 
@@ -275,30 +194,43 @@ def main():
                 ("> SUCCESS: Access granted.", 1.2), 
                 ("> WELCOME!", 1.5)
             ]
-            for text, delay in steps:
-                full_log += f"<div class='terminal-text'>{text}</div>"
-                log_area.markdown(full_log, unsafe_allow_html=True)
-                time.sleep(delay)
+            full_text = ""
+            for line in lines:
+                full_text += f"<div class='terminal-text'>{line}</div>"
+                log_area.markdown(full_text, unsafe_allow_html=True)
+                time.sleep(0.8)
             st.session_state.state = 'party'
             st.rerun()
 
     elif st.session_state.state == 'party':
-        show_party_visuals()
-        with main_placeholder.container():
+        # Qui chiamiamo i visual (fuochi e rain)
+        show_fireworks_and_rain()
+        
+        with placeholder.container():
             play_audio("musica.mp3", loop=True)
             
-            # Titolo Unlocked Gigante
-            st.markdown("<div class='unlocked-title'>2026<br>UNLOCKED</div>", unsafe_allow_html=True)
+            # Titolo Ridimensionato
+            st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
             
-            # Box Buon Anno
+            # Box Buon Anno che non va a capo
             st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
             
-            if os.path.exists("foto.png"): 
+            # Immagine finale se esiste
+            if os.path.exists("foto.png"):
                 st.image("foto.png", use_container_width=True)
-            
-            if st.button("TERMINATE CONNECTION"):
+            else:
+                st.info("Aggiungi 'foto.png' per vederla qui!")
+
+            if st.button("LOGOUT"):
                 st.session_state.state = 'login'
                 st.rerun()
+
+# Funzione Audio helper
+def play_audio(file_name, loop=False):
+    b64 = get_audio_b64(file_name)
+    if b64:
+        loop_attr = "loop" if loop else ""
+        components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
 
 if __name__ == "__main__":
     main()

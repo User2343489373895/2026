@@ -18,7 +18,7 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS GLOBALE RESPONSIVE (FIX MOBILE) ---
+# --- CSS GLOBALE RESPONSIVE (MIGLIORATO) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
@@ -26,21 +26,22 @@ st.markdown("""
     .stApp { background-color: #050505 !important; overflow-x: hidden; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Titolo Login - Pink Neon */
+    /* Titoli Principali (Login e Hacking) */
     .pink-neon { 
         color: #ff00ff; 
         text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
         font-family: 'Orbitron', sans-serif; 
         text-align: center; 
-        font-size: clamp(22px, 7vw, 48px); /* Ridotto il minimo per mobile */
+        /* clamp(min, pref, max) - Ridotto il min per far stare "OVERRIDING VIP SERVER" su mobile */
+        font-size: clamp(16px, 6vw, 48px); 
         font-weight: 900; 
         margin-bottom: 5px;
         width: 100%;
-        white-space: nowrap; /* Impedisce di andare a capo */
+        white-space: nowrap;
         display: block;
     }
 
-    /* Sottotitolo Login - Cyan */
+    /* Sottotitolo Login */
     .cyan-sub {
         color: #00ffff;
         text-shadow: 0 0 8px #00ffff;
@@ -55,7 +56,7 @@ st.markdown("""
         display: block;
     }
 
-    /* Box di Successo HTML - Buon Anno */
+    /* Box Successo 🥂 */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
@@ -64,30 +65,37 @@ st.markdown("""
         padding: clamp(10px, 3vw, 25px);
         text-align: center;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(14px, 4.5vw, 30px); /* Ridotto per mobile */
+        font-size: clamp(14px, 4.5vw, 30px);
         font-weight: bold;
         text-shadow: 0 0 15px #00ff41;
         margin: 20px auto;
         width: 100%;
-        white-space: nowrap; /* Forza il testo su una riga */
+        white-space: nowrap;
     }
 
-    /* Titolo Finale - 2026 Unlocked */
+    /* Titolo 2026 UNLOCKED - Ingrandito per Desktop */
     .unlocked-title {
         color: white; 
         font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(24px, 8vw, 55px); 
-        text-shadow: 0 0 20px #ff00ff;
+        /* Aumentato il max a 80px e il pref a 10vw per impatto su desktop */
+        font-size: clamp(24px, 10vw, 80px); 
+        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
         text-align: center;
         white-space: nowrap;
         position: relative;
         z-index: 10;
-        margin-top: 10px;
+        margin: 20px 0;
     }
 
     .terminal-text {
-        font-family: 'Fira Code', monospace; color: #00ff41; font-size: clamp(11px, 2.8vw, 14px);
-        background: rgba(0, 255, 65, 0.1); padding: 12px; border-left: 3px solid #00ff41; margin-bottom: 5px;
+        font-family: 'Fira Code', monospace; 
+        color: #00ff41; 
+        font-size: clamp(11px, 2.8vw, 14px);
+        background: rgba(0, 255, 65, 0.1); 
+        padding: 12px; 
+        border-left: 3px solid #00ff41; 
+        margin-bottom: 5px;
+        word-wrap: break-word;
     }
 
     .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
@@ -101,7 +109,6 @@ st.markdown("""
 
     iframe { position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important; border: none; pointer-events: none; z-index: 5; }
     
-    /* Centratura colonne */
     [data-testid="column"] { display: flex; justify-content: center; align-items: center; }
     </style>
     """, unsafe_allow_html=True)
@@ -116,7 +123,7 @@ def play_audio(file_name, loop=False):
 def show_party_visuals():
     chars = ["$", "0", "1", "🥂", "✨", "💎", "🍑" , "2", "0", "2", "6"]
     rain_html = '<div class="matrix-rain">'
-    for i in range(35): # Alleggerito per mobile
+    for i in range(35):
         left = i * 2.8
         rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; animation-duration:{random.uniform(2,5)}s;">{random.choice(chars)}</div>'
     st.markdown(rain_html + '</div>', unsafe_allow_html=True)
@@ -187,6 +194,7 @@ def main():
     elif st.session_state.state == 'hacking':
         with main_placeholder.container():
             play_audio("scena2.mp3", loop=False)
+            # Qui il clamp dinamico gestisce la lunghezza della stringa
             st.markdown("<h2 class='pink-neon'>OVERRIDING VIP SERVER...</h2>", unsafe_allow_html=True)
             log_area = st.empty()
             full_log = ""
@@ -195,8 +203,8 @@ def main():
                 ("> Bypassing IDS/IPS...", 1.5), 
                 ("> Deep Packet Inspection...", 1.8), 
                 ("> Escalating privileges...", 1.5), 
-                ("> SUCCESS: Access granted.", 1.0),
-                ("> WELCOME!", 1.2)
+                ("> SUCCESS: Access granted.", 1.2),
+                (">WELCOME!", 1.2)
             ]
             for text, delay in steps:
                 full_log += f"<div class='terminal-text'>{text}</div>"
@@ -211,14 +219,14 @@ def main():
             play_audio("musica.mp3", loop=False)
             show_party_visuals()
             
-            # 1. ASCII
+            # 1. ASCII (Invertito come richiesto)
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # 2. TITOLO (Fix Mobile Nowrap)
+            # 2. TITOLO (Ingrandito per desktop, responsive per mobile)
             st.markdown("<h1 class='unlocked-title'>2026 UNLOCKED</h1>", unsafe_allow_html=True)
             
-            # 3. BOX SUCCESSO (Fix Mobile Nowrap)
+            # 3. BOX SUCCESSO
             st.markdown("""
                 <div class="custom-success-box">
                     🥂 BUON ANNO, LOCANDIERI! 🥂

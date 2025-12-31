@@ -6,61 +6,65 @@ import random
 import streamlit.components.v1 as components
 
 # 1. Configurazione Pagina
-st.set_page_config(page_title="GÜNTHER_BACKDOOR_2026", page_icon="🫦", layout="centered")
+st.set_page_config(page_title="NEON_OVERRIDE_2026", page_icon="📟", layout="centered")
 
-# --- CSS: NEON, GLOSS E BASS SHAKE ---
+# --- CSS: CYBER-STRIP & HACKER VIBE (Senza riferimenti a Gunther) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
     
-    .stApp { background-color: #0d000d; overflow-x: hidden; }
+    .stApp { background-color: #050505; }
     header, footer, #MainMenu {visibility: hidden;}
 
-    /* Effetto vibrazione per il finale */
-    @keyframes shake {
-        0% { transform: translate(1px, 1px) rotate(0deg); }
-        10% { transform: translate(-1px, -2px) rotate(-1deg); }
-        20% { transform: translate(-3px, 0px) rotate(1deg); }
-        30% { transform: translate(3px, 2px) rotate(0deg); }
-        40% { transform: translate(1px, -1px) rotate(1deg); }
-        50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    }
-
-    .neon-title {
+    .neon-text {
         font-family: 'Orbitron', sans-serif;
-        color: #ff00ff;
-        text-shadow: 0 0 10px #ff00ff, 0 0 30px #ff00ff;
+        color: #00ffff;
+        text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
         text-align: center;
-        font-size: 45px;
+    }
+    
+    .pink-neon {
+        color: #ff00ff;
+        text-shadow: 0 0 10px #ff00ff;
+        font-family: 'Orbitron', sans-serif;
     }
 
     .terminal-text {
         font-family: 'Fira Code', monospace;
-        color: #ff00ff;
+        color: #00ff41;
         font-size: 14px;
-        background: rgba(255, 0, 255, 0.1);
-        padding: 8px;
-        border-left: 3px solid #00ffff;
+        background: rgba(0, 255, 65, 0.05);
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #00ff41;
         margin-bottom: 5px;
     }
 
+    /* Pioggia di Dollari e Codice */
     .matrix-rain {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         pointer-events: none; z-index: 1; opacity: 0.4;
     }
     .bit {
         position: absolute; top: -30px;
-        font-family: monospace; font-size: 24px;
+        font-family: monospace; font-size: 20px;
         animation: fall linear infinite;
     }
     @keyframes fall { to { transform: translateY(110vh); } }
-    
+
     div.stButton > button {
-        background: linear-gradient(45deg, #ff00ff, #00ffff) !important;
+        background-color: transparent !important;
+        color: #ff00ff !important;
+        border: 2px solid #ff00ff !important;
+        font-family: 'Orbitron', sans-serif !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        box-shadow: 0 0 10px #ff00ff;
+    }
+    div.stButton > button:hover {
+        background-color: #ff00ff !important;
         color: white !important;
-        font-weight: bold !important;
-        border: none !important;
-        box-shadow: 0 0 20px #ff00ff !important;
+        box-shadow: 0 0 30px #ff00ff;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -72,13 +76,13 @@ def play_audio(file_name):
             md = f"""<audio autoplay="true" style="display:none;"><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>"""
             components.html(md, height=0, width=0)
 
-def start_gunther_rain():
-    # Pioggia di elementi a tema Günther e Cyber
-    chars = ["🫦", "🕶️", "✨", "0", "1", "$", "🔥", "🥂"]
+def start_cyber_rain():
+    # Mix di cybersecurity e club (dollari, bit, cuori neon)
+    chars = ["$", "0", "1", "💎", "👾", "🥂", "🍑", "✨"]
     html_bits = '<div class="matrix-rain">'
     for i in range(80):
-        left = i * 2.5
-        duration = random.uniform(1.5, 4)
+        left = i * 1.25
+        duration = random.uniform(2, 5)
         color = "#ff00ff" if i % 2 == 0 else "#00ffff"
         char = random.choice(chars)
         html_bits += f'<div class="bit" style="left:{left}%; color:{color}; animation-duration:{duration}s;">{char}</div>'
@@ -86,38 +90,40 @@ def start_gunther_rain():
     st.markdown(html_bits, unsafe_allow_html=True)
 
 def main():
-    if 'access' not in st.session_state:
-        st.session_state.access = False
+    if 'auth' not in st.session_state:
+        st.session_state.auth = False
 
-    if not st.session_state.access:
-        st.markdown("<h1 class='neon-title'>THE BACKDOOR 2026</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='color:white; text-align:center;'>Access the Private Deep_Dong Server</p>", unsafe_allow_html=True)
+    if not st.session_state.auth:
+        # --- LOGIN PAGE (Hacker-Style) ---
+        st.markdown("<h1 class='neon-text'>THE BACKDOOR</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='color:#ff00ff; text-align:center; font-family:Orbitron;'>SECURE VIP ENTRANCE // 2026</p>", unsafe_allow_html=True)
         
-        # GIF di Günther o stile Cyber-Sexy (Sostituito con uno stabile)
+        # Immagine di atmosfera (Cyberpunk city o buttafuori)
         st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZidW5pZ3MwaHh6OHZidW5pZ3MwaHh6OHZidW5pZ3MwaHh6OHZidW5pZ3MmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/3o7TKVUn7iM8FMEU24/giphy.gif")
 
-        pwd = st.text_input("ENTER SECRET PASSCODE:", type="password")
-        if st.button("TOUCH MY TRALALA"):
-            if pwd.lower().strip() in ["gunther", "dingdong", "2026"]:
-                st.session_state.access = True
+        pwd = st.text_input("ACCESS KEY:", type="password")
+        if st.button("BYPASS FIREWALL"):
+            if pwd.lower().strip() == "locandieri":
+                st.session_state.auth = True
                 st.rerun()
             else:
-                st.error("BOUNCER: 'You don't have enough mustache for this club.'")
+                st.error("ACCESS DENIED: Firewall is holding strong.")
     else:
-        # --- SEQUENZA DI HACKING ---
+        # --- HACKING ANIMATION ---
         play_audio("modem.mp3")
-        st.markdown("<h2 class='neon-title' style='font-size:25px;'>INJECTING GÜNTHER_PAYLOAD.EXE...</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 class='pink-neon' style='text-align:center;'>OVERRIDING VIP SERVER...</h2>", unsafe_allow_html=True)
         
         log_placeholder = st.empty()
         full_log = ""
         
+        # Log a doppio senso tecnico-sexy
         steps = [
-            ("> Scanning 'Tralala' sectors...", 1.2),
-            ("> Bypassing Virgin_Firewall_v2.0...", 1.5),
-            ("> Deep Dong Inspection in progress...", 1.8),
-            ("> Escalating mustache privileges...", 1.5),
-            ("> Cracking 'Ding_Ding_Dong.key'...", 2.0),
-            ("> Root access granted. Oh, you touched it!", 1.5),
+            ("> Initializing 'Seductive_Handshake' protocol...", 1.2),
+            ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5),
+            ("> Deep Packet Inspection of 'Private_Area'...", 1.8),
+            ("> Escalating privileges to 'GOD_MODE'...", 1.5),
+            ("> Extracting 'Secret_Payload_2026.bin'...", 2.0),
+            ("> SUCCESS: Welcome to the New Year, Locandieri.", 1.2),
         ]
 
         for text, delay in steps:
@@ -125,34 +131,32 @@ def main():
             log_placeholder.markdown(full_log, unsafe_allow_html=True)
             time.sleep(delay)
 
-        # --- FINALE ---
+        # --- GRAN FINALE (Qui parte Gunther) ---
         st.empty()
-        # Applica l'animazione di vibrazione allo schermo intero
-        st.markdown("<script>document.body.style.animation = 'shake 0.5s infinite';</script>", unsafe_allow_html=True)
-        
-        start_gunther_rain()
-        play_audio("musica.mp3") # DEVE ESSERE DING DING DONG
+        start_cyber_rain()
+        play_audio("musica.mp3") # <--- Qui carichi Gunther
 
         st.markdown("""
             <div style='text-align: center;'>
-                <h1 style='color: #ff00ff; font-family: Orbitron; font-size: 60px; margin-bottom: 0;'>2026</h1>
-                <h2 style='color: #00ffff; font-family: Orbitron; font-size: 30px;'>YOU UNLOCKED THE DONG</h2>
+                <h1 style='color: white; font-family: Orbitron; font-size: 50px; text-shadow: 0 0 20px #ff00ff;'>2026 UNLOCKED</h1>
+                <p style='color: #00ffff; font-family: Orbitron; font-size: 20px;'>The backdoor is open. Enjoy the show.</p>
             </div>
             """, unsafe_allow_html=True)
 
-        # GIF DI GÜNTHER (Iconica)
-        st.image("https://media1.tenor.com/m/Xz_V6D_8_6sAAAAd/gunther-ding-ding-dong.gif", use_container_width=True)
-
+        # Immagini originali del vostro gruppo
         if os.path.exists("ascii.png"):
             st.image("ascii.png", use_container_width=True)
         
-        st.success("BUON ANNO LOCANDIERI! 🥂🫦")
+        st.success("BUON ANNO, LOCANDIERI! 🥂🔥")
 
         if os.path.exists("foto.png"):
-            st.image("foto.png", use_container_width=True)
+            st.image("foto.png", caption="THE CREW", use_container_width=True)
         
-        if st.button("LOGOUT (DON'T TOUCH IT ANYMORE)"):
-            st.session_state.access = False
+        # Un piccolo omaggio visivo a Gunther solo alla fine
+        st.markdown("<p style='text-align:center; color:#ff00ff; font-family:monospace; font-size:10px;'>Payload: Ding_Ding_Dong.mp3 loaded successfully.</p>", unsafe_allow_html=True)
+
+        if st.button("TERMINATE CONNECTION"):
+            st.session_state.auth = False
             st.rerun()
 
 if __name__ == "__main__":

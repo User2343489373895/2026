@@ -5,7 +5,7 @@ import base64
 import random
 import streamlit.components.v1 as components
 
-# 1. Configurazione (Deve essere la prima cosa)
+# 1. Configurazione
 st.set_page_config(page_title="NEON_OVERRIDE_2026", page_icon="📟", layout="centered")
 
 # --- CSS GLOBALE ---
@@ -14,55 +14,69 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
     .stApp { background-color: #050505 !important; }
     header, footer, #MainMenu {visibility: hidden;}
+    
     .neon-text { font-family: 'Orbitron', sans-serif; color: #00ffff; text-shadow: 0 0 10px #00ffff; text-align: center; }
     .pink-neon { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; font-family: 'Orbitron', sans-serif; text-align: center; font-size: 24px; }
+    
     .terminal-text {
         font-family: 'Fira Code', monospace; color: #00ff41; font-size: 14px;
         background: rgba(0, 255, 65, 0.1); padding: 15px; border-left: 3px solid #00ff41; margin-bottom: 5px;
     }
+    
+    /* Pioggia di Bit */
     .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.4; }
     .bit { position: absolute; top: -30px; font-family: monospace; font-size: 20px; animation: fall linear infinite; }
     @keyframes fall { to { transform: translateY(110vh); } }
+    
+    /* Bottone */
     div.stButton > button {
         background-color: transparent !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
         font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 10px #ff00ff; height: 50px;
+        position: relative; z-index: 100;
+    }
+
+    /* TRUCCO PER I FUOCHI: Rende l'iframe dei fuochi a tutto schermo e trasparente */
+    iframe[title="streamlit_components.v1.html"] {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100vw !important;
+        height: 100vh !important;
+        pointer-events: none; /* Permette di cliccare i bottoni sotto i fuochi */
+        z-index: 9999;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- NUOVA FUNZIONE FUOCHI D'ARTIFICIO ---
-def show_fireworks():
-    # JavaScript per lanciare fuochi dai due angoli bassi
+# --- FUNZIONE FUOCHI INFINITI ---
+def show_infinite_fireworks():
+    # JavaScript con loop infinito per lanciare fuochi dagli angoli in basso
     components.html(
         """
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
         <script>
-            var end = Date.now() + (60 * 1000); // Durata 60 secondi
-            var colors = ['#ff00ff', '#00ffff', '#ffffff', '#ff00aa'];
-
-            (function frame() {
-              confetti({
-                particleCount: 3,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0, y: 1 }, // Angolo basso Sinistra
-                colors: colors
-              });
-              confetti({
-                particleCount: 3,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1, y: 1 }, // Angolo basso Destra
-                colors: colors
-              });
-
-              if (Date.now() < end) {
-                requestAnimationFrame(frame);
-              }
-            }());
+            function launch() {
+                // Lancio da Sinistra
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 1 },
+                    colors: ['#ff00ff', '#00ffff', '#ffffff']
+                });
+                // Lancio da Destra
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 1 },
+                    colors: ['#ff00ff', '#00ffff', '#ffffff']
+                });
+            }
+            // Ripete il lancio ogni 150ms per un effetto continuo
+            var timer = setInterval(launch, 150);
         </script>
-        """,
-        height=0,
+        """
     )
 
 def play_audio(file_name):
@@ -95,9 +109,7 @@ if st.session_state.state == 'login':
     with placeholder.container():
         st.markdown("<h1 class='neon-text'>THE BACKDOOR</h1>", unsafe_allow_html=True)
         st.markdown("<p style='color:#ff00ff; text-align:center; font-family:Orbitron;'>SECURE VIP ENTRANCE // 2026</p>", unsafe_allow_html=True)
-        
         st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZidW5pZ3MwaHh6OHZidW5pZ3MwaHh6OHZidW5pZ3MwaHh6OHZidW5pZ3MmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/3o7TKVUn7iM8FMEU24/giphy.gif")
-
         pwd = st.text_input("ACCESS KEY:", type="password")
         if st.button("BYPASS FIREWALL"):
             if pwd.lower().strip() == "locandieri":
@@ -105,17 +117,15 @@ if st.session_state.state == 'login':
                 placeholder.empty()
                 st.rerun()
             else:
-                st.error("ACCESS DENIED: Firewall is holding strong.")
+                st.error("ACCESS DENIED")
 
 # FASE 2: HACKING
 elif st.session_state.state == 'hacking':
     with placeholder.container():
         play_audio("modem.mp3")
         st.markdown("<h2 class='pink-neon'>OVERRIDING VIP SERVER...</h2>", unsafe_allow_html=True)
-        
         log_area = st.empty()
         full_log = ""
-        
         steps = [
             ("> Initializing 'Seductive_Handshake' protocol...", 1.2),
             ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5),
@@ -124,12 +134,10 @@ elif st.session_state.state == 'hacking':
             ("> Extracting 'Secret_Payload_2026.bin'...", 2.0),
             ("> SUCCESS: System compromised.", 1.0),
         ]
-
         for text, delay in steps:
             full_log += f"<div class='terminal-text'>{text}</div>"
             log_area.markdown(full_log, unsafe_allow_html=True)
             time.sleep(delay)
-        
         st.session_state.state = 'party'
         placeholder.empty()
         st.rerun()
@@ -137,12 +145,13 @@ elif st.session_state.state == 'hacking':
 # FASE 3: PARTY FINALE
 elif st.session_state.state == 'party':
     with placeholder.container():
+        # Attiva gli effetti
         start_cyber_rain()
-        show_fireworks() # <--- RICHIESTA FUOCHI D'ARTIFICIO
+        show_infinite_fireworks() # Lancio continuo
         play_audio("musica.mp3")
 
         st.markdown("""
-            <div style='text-align: center;'>
+            <div style='text-align: center; position: relative; z-index: 101;'>
                 <h1 style='color: white; font-family: Orbitron; font-size: 50px; text-shadow: 0 0 20px #ff00ff;'>2026 UNLOCKED</h1>
                 <p style='color: #00ffff; font-family: Orbitron; font-size: 20px;'>The backdoor is open. Enjoy the show.</p>
             </div>
@@ -156,6 +165,7 @@ elif st.session_state.state == 'party':
         if os.path.exists("foto.png"):
             st.image("foto.png", caption="THE CREW", use_container_width=True)
         
+        # Il logout distrugge il componente JS e quindi ferma i fuochi
         if st.button("TERMINATE CONNECTION"):
             st.session_state.state = 'login'
             placeholder.empty()

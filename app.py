@@ -196,8 +196,8 @@ def main():
             show_party_visuals()
             
             # 1. Immagine ASCII prima
-            if os.path.exists("ascii.png"): 
-                st.image("ascii.png", use_container_width=True)
+            if os.path.exists("ascii2.png"): 
+                st.image("ascii2.png", use_container_width=True)
             
             # 2. Scritta 2026 UNLOCKED dopo
             st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
@@ -215,3 +215,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -15,8 +15,8 @@ st.markdown("""
     .stApp { background-color: #050505 !important; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    .neon-text { font-family: 'Orbitron', sans-serif; color: #00ffff; text-shadow: 0 0 10px #00ffff; text-align: center; }
-    .pink-neon { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; font-family: 'Orbitron', sans-serif; text-align: center; font-size: 24px; }
+    .neon-text { font-family: 'Orbitron', sans-serif; color: #00ffff; text-shadow: 0 0 10px #00ffff; text-align: center; position: relative; z-index: 10; }
+    .pink-neon { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; font-family: 'Orbitron', sans-serif; text-align: center; font-size: 24px; position: relative; z-index: 10; }
     
     .terminal-text {
         font-family: 'Fira Code', monospace; color: #00ff41; font-size: 14px;
@@ -24,7 +24,7 @@ st.markdown("""
     }
     
     /* Pioggia di Bit */
-    .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.4; }
+    .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
     .bit { position: absolute; top: -30px; font-family: monospace; font-size: 20px; animation: fall linear infinite; }
     @keyframes fall { to { transform: translateY(110vh); } }
     
@@ -35,48 +35,120 @@ st.markdown("""
         position: relative; z-index: 100;
     }
 
-    /* TRUCCO PER I FUOCHI: Rende l'iframe dei fuochi a tutto schermo e trasparente */
-    iframe[title="streamlit_components.v1.html"] {
+    /* FIX DEFINITIVO PER I FUOCHI A TUTTO SCHERMO */
+    .fireworks-container {
         position: fixed;
-        bottom: 0;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 5; /* Sopra la pioggia di bit, sotto il testo */
+        pointer-events: none;
+    }
+    iframe {
+        position: fixed;
+        top: 0;
         left: 0;
         width: 100vw !important;
         height: 100vh !important;
-        pointer-events: none; /* Permette di cliccare i bottoni sotto i fuochi */
-        z-index: 9999;
+        border: none;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- FUNZIONE FUOCHI INFINITI ---
-def show_infinite_fireworks():
-    # JavaScript con loop infinito per lanciare fuochi dagli angoli in basso
+# --- FUNZIONE FUOCHI D'ARTIFICIO "PRO" ---
+def show_real_fireworks():
+    # JavaScript per creare un sistema di fuochi d'artificio su Canvas
     components.html(
         """
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <canvas id="fireworksCanvas"></canvas>
+        <style>
+            body { margin: 0; overflow: hidden; background: transparent; }
+            canvas { display: block; background: transparent; }
+        </style>
         <script>
-            function launch() {
-                // Lancio da Sinistra
-                confetti({
-                    particleCount: 3,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0, y: 1 },
-                    colors: ['#ff00ff', '#00ffff', '#ffffff']
-                });
-                // Lancio da Destra
-                confetti({
-                    particleCount: 3,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1, y: 1 },
-                    colors: ['#ff00ff', '#00ffff', '#ffffff']
-                });
+            const canvas = document.getElementById('fireworksCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            class Firework {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height;
+                    this.sx = Math.random() * 3 - 1.5;
+                    this.sy = Math.random() * -3 - 7;
+                    this.size = 2;
+                    this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    this.shouldExplode = false;
+                }
+                update() {
+                    this.x += this.sx;
+                    this.y += this.sy;
+                    this.sy += 0.1; // Gravità
+                    if (this.sy >= -1) this.shouldExplode = true;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
-            // Ripete il lancio ogni 150ms per un effetto continuo
-            var timer = setInterval(launch, 150);
+
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.sx = Math.random() * 6 - 3;
+                    this.sy = Math.random() * 6 - 3;
+                    this.life = 100;
+                    this.color = color;
+                }
+                update() {
+                    this.x += this.sx;
+                    this.y += this.sy;
+                    this.life -= 1.5;
+                }
+                draw() {
+                    ctx.globalAlpha = this.life / 100;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            let fireworks = [];
+            let particles = [];
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                if (Math.random() < 0.05) fireworks.push(new Firework());
+
+                fireworks.forEach((f, i) => {
+                    f.update();
+                    f.draw();
+                    if (f.shouldExplode) {
+                        for (let j = 0; j < 50; j++) particles.push(new Particle(f.x, f.y, f.color));
+                        fireworks.splice(i, 1);
+                    }
+                });
+
+                particles.forEach((p, i) => {
+                    p.update();
+                    p.draw();
+                    if (p.life <= 0) particles.splice(i, 1);
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
         </script>
-        """
+        """,
+        height=1000, # Valore alto per forzare l'altezza dell'iframe
     )
 
 def play_audio(file_name):
@@ -87,7 +159,7 @@ def play_audio(file_name):
             components.html(md, height=0, width=0)
 
 def start_cyber_rain():
-    chars = ["$", "0", "1", "💎", "👾", "🥂", "🍑", "✨"]
+    chars = ["$", "0", "1", "🥂", "🍑", "✨"]
     html_bits = '<div class="matrix-rain">'
     for i in range(80):
         left = i * 1.25
@@ -145,13 +217,13 @@ elif st.session_state.state == 'hacking':
 # FASE 3: PARTY FINALE
 elif st.session_state.state == 'party':
     with placeholder.container():
-        # Attiva gli effetti
+        # L'ordine è importante: i fuochi devono essere renderizzati
+        show_real_fireworks()
         start_cyber_rain()
-        show_infinite_fireworks() # Lancio continuo
         play_audio("musica.mp3")
 
         st.markdown("""
-            <div style='text-align: center; position: relative; z-index: 101;'>
+            <div style='text-align: center;'>
                 <h1 style='color: white; font-family: Orbitron; font-size: 50px; text-shadow: 0 0 20px #ff00ff;'>2026 UNLOCKED</h1>
                 <p style='color: #00ffff; font-family: Orbitron; font-size: 20px;'>The backdoor is open. Enjoy the show.</p>
             </div>
@@ -165,7 +237,6 @@ elif st.session_state.state == 'party':
         if os.path.exists("foto.png"):
             st.image("foto.png", caption="THE CREW", use_container_width=True)
         
-        # Il logout distrugge il componente JS e quindi ferma i fuochi
         if st.button("TERMINATE CONNECTION"):
             st.session_state.state = 'login'
             placeholder.empty()

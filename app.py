@@ -4,150 +4,147 @@ import os
 import base64
 import random
 import streamlit.components.v1 as components
-from datetime import datetime
 
 # 1. Configurazione Pagina
-st.set_page_config(page_title="SYS_UPGRADE_2026", page_icon="💾", layout="centered")
+st.set_page_config(page_title="THE_BACKDOOR_2026", page_icon="💃", layout="centered")
 
-# --- CSS AVANZATO: GLITCH E TERMINALE ---
+# --- CSS: NEON STRIP CLUB LOOK ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
 
-    .stApp { background-color: #0d0d0d; }
+    .stApp { background-color: #050505; }
     header, footer, #MainMenu {visibility: hidden;}
 
-    .terminal-font {
+    /* Testo Neon */
+    .neon-text {
+        font-family: 'Orbitron', sans-serif;
+        color: #ff00ff;
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+        text-align: center;
+    }
+    
+    .terminal-text {
         font-family: 'Fira Code', monospace;
-        color: #00FF41;
+        color: #00ffff;
+        font-size: 14px;
     }
 
-    /* Effetto Glitch per il titolo */
-    .glitch {
-        font-size: 3rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        position: relative;
-        text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
-                     0.025em 0.04em 0 #fffc00;
-        animation: glitch 725ms infinite;
-    }
-
-    @keyframes glitch {
-        0% { text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00; }
-        15% { text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00; }
-        16% { text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff, -0.05em -0.05em 0 #fffc00; }
-        49% { text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff, -0.05em -0.05em 0 #fffc00; }
-        50% { text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff, 0 -0.04em 0 #fffc00; }
-        99% { text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff, 0 -0.04em 0 #fffc00; }
-        100% { text-shadow: -0.05em 0 0 #00fffc, -0.025em -0.025em 0 #fc00ff, -0.025em -0.05em 0 #fffc00; }
-    }
-
-    /* Overlay per scanline (effetto vecchio monitor) */
-    .overlay {
+    /* Pioggia di Dollari e Bit */
+    .matrix-rain {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-        background-size: 100% 2px, 3px 100%;
-        pointer-events: none; z-index: 1000;
+        pointer-events: none; z-index: 1; opacity: 0.5;
+    }
+    .bit {
+        position: absolute; top: -30px;
+        font-family: monospace; font-size: 22px;
+        animation: fall linear infinite;
+    }
+    @keyframes fall { to { transform: translateY(110vh); } }
+
+    /* Bottone Custom */
+    div.stButton > button {
+        background-color: #ff00ff;
+        color: white;
+        border: 2px solid #00ffff;
+        font-family: 'Orbitron', sans-serif;
+        box-shadow: 0 0 15px #ff00ff;
+        width: 100%;
     }
     </style>
-    <div class="overlay"></div>
     """, unsafe_allow_html=True)
 
 def play_audio(file_name):
     if os.path.exists(file_name):
         with open(file_name, "rb") as f:
-            data = f.read()
-            b64 = base64.b64encode(data).decode()
-            md = f"""
-                <audio autoplay="true" style="display:none;">
-                    <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
-                </audio>
-                """
+            b64 = base64.b64encode(f.read()).decode()
+            md = f"""<audio autoplay="true" style="display:none;"><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>"""
             components.html(md, height=0, width=0)
 
+def start_vip_rain():
+    cols = 80
+    chars = ["$", "0", "1", "🥂", "🍑", "✨", "💎"]
+    html_bits = '<div class="matrix-rain">'
+    for i in range(cols):
+        left = i * 2.5
+        duration = random.uniform(2, 5)
+        color = "#ff00ff" if i % 2 == 0 else "#00ffff"
+        char = random.choice(chars)
+        html_bits += f'<div class="bit" style="left:{left}%; color:{color}; animation-duration:{duration}s;">{char}</div>'
+    html_bits += '</div>'
+    st.markdown(html_bits, unsafe_allow_html=True)
+
 def main():
-    if 'stage' not in st.session_state:
-        st.session_state.stage = 'lock'
+    if 'access_granted' not in st.session_state:
+        st.session_state.access_granted = False
 
-    # --- STAGE 1: LOCK SCREEN ---
-    if st.session_state.stage == 'lock':
-        st.markdown('<div class="glitch" style="text-align:center;">CRITICAL_ERROR</div>', unsafe_allow_html=True)
-        st.markdown("<br><p class='terminal-font' style='text-align:center;'>UNEXPECTED TEMPORAL DRIFT DETECTED: 2025 -> 2026</p>", unsafe_allow_html=True)
+    if not st.session_state.access_granted:
+        # --- ENTRATA CLUB ---
+        st.markdown("<h1 class='neon-text'>THE BACKDOOR</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='color:white; text-align:center;'>CYBER-STRIP & VIP LOUNGE</p>", unsafe_allow_html=True)
         
-        col1, col2, col3 = st.columns([1,2,1])
-        with col2:
-            if st.button("INITIATE EMERGENCY PATCH"):
-                st.session_state.stage = 'patching'
+        st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJqZ2Z5Z3Z5Z3Z5Z3Z5Z3Z5Z3Z5Z3Z5Z3Z5Z3Z5Z3Z5JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxxcaTlg90c/giphy.gif", use_container_width=True) # Un GIF di luci neon o buttafuori
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        pwd = st.text_input("INSERT PRIVATE KEY (VIP PASS):", type="password")
+        
+        if st.button("PAY THE BOUNCER"):
+            if pwd.lower() == "2026": # Password semplice o a scelta
+                st.session_state.access_granted = True
                 st.rerun()
-
-    # --- STAGE 2: PATCHING (INTERATTIVO) ---
-    elif st.session_state.stage == 'patching':
-        st.markdown("<h2 class='terminal-font'>ROOT@CACTUS_CORE: patching kernel...</h2>", unsafe_allow_html=True)
+            else:
+                st.error("BOUNCER: 'You're not on the list, kid.'")
+    else:
+        # --- DENTRO IL CLUB (HACKING IL PRIVE) ---
+        play_audio("modem.mp3")
         
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        log_area = st.empty()
+        st.markdown("<h2 class='neon-text'>ESTABLISHING SECURE CONNECTION...</h2>", unsafe_allow_html=True)
         
-        logs = [
-            "Stopping epoch_clock.service...",
-            "Overriding UTC_limit_2025...",
-            "Rebuilding timestamp_headers...",
-            "Injecting 'HappyNewYear.so' library...",
-            "Clearing 2025 cache files...",
-            "Synchronizing with atomic_clock_v6..."
+        log_placeholder = st.empty()
+        full_log = ""
+        
+        # Log a tema "cyber-strip"
+        steps = [
+            ("> Connecting to 'NEON_DREAMS_AP'...", 1.5),
+            ("> Bypassing 'Velvet_Curtain' Firewall...", 2.0),
+            ("> Deep Packet Inspection (DPI) in progress... 😉", 2.5),
+            ("> Exploiting 'Hot_Plug' vulnerability...", 2.0),
+            ("> Escalating privileges to 'GOD_MODE'...", 3.0),
+            ("> Downloading private_content.zip...", 2.5),
+            ("> Decrypting 2026 New Year Assets...", 2.0),
+            ("> SYSTEM READY FOR THE BIG SHOW.", 1.5),
         ]
-        
-        for i, log in enumerate(logs):
-            status_text.markdown(f"<p class='terminal-font'>[RUNNING]: {log}</p>", unsafe_allow_html=True)
-            progress_bar.progress((i + 1) * 16)
-            time.sleep(random.uniform(0.8, 2.0))
-        
-        st.session_state.stage = 'countdown'
-        st.rerun()
 
-    # --- STAGE 3: COUNTDOWN E CELEBRAZIONE ---
-    elif st.session_state.stage == 'countdown':
-        # Qui facciamo finta che manchino pochi secondi alla mezzanotte o al "reboot"
-        st.markdown("<div class='glitch' style='text-align:center;'>SYSTEM REBOOT</div>", unsafe_allow_html=True)
-        
-        # Countdown finto di 5 secondi per suspense
-        placeholder = st.empty()
-        for i in range(5, 0, -1):
-            placeholder.markdown(f"<h1 style='text-align:center; font-size:100px; color:white;'>{i}</h1>", unsafe_allow_html=True)
-            time.sleep(1)
-        
-        placeholder.empty()
-        st.session_state.stage = 'success'
-        st.rerun()
+        for text, delay in steps:
+            full_log += f"<div class='terminal-text'>{text}</div>"
+            log_placeholder.markdown(full_log, unsafe_allow_html=True)
+            time.sleep(delay)
 
-    # --- STAGE 4: FINALE 2026 ---
-    elif st.session_state.stage == 'success':
-        play_audio("musica.mp3") # La vostra musica rock
-        
-        # Titolo Finale
+        # --- GRAN FINALE ---
+        st.empty()
+        start_vip_rain()
+        play_audio("musica.mp3") # La vostra musica rock/dance
+
         st.markdown("""
-            <h1 style='text-align: center; color: #00FF41; font-family: monospace; border: 2px solid #00FF41; padding: 20px;'>
-                MISSION ACCOMPLISHED: WELCOME TO 2026
+            <h1 style='text-align: center; color: white; font-family: Orbitron; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 50px;'>
+                HAPPY NEW YEAR 2026!
             </h1>
+            <p style='text-align: center; color: #ff00ff; font-weight: bold;'>Welcome to the VIP Room, Locandieri.</p>
             """, unsafe_allow_html=True)
-        
-        st.balloons()
-        
-        # Immagine ASCII o Foto
-        if os.path.exists("ascii.png"):
-            st.image("ascii.png", use_container_width=True)
-        
-        st.success("Buon Anno, Locandieri! Il sistema è stabile. Per ora.")
-        
-        if os.path.exists("foto.png"):
-            st.image("foto.png", use_container_width=True)
 
-        st.markdown("<p class='terminal-font' style='opacity:0.5;'>uptime: 0 days, 0 hours, 1 minute. No errors found.</p>", unsafe_allow_html=True)
+        # Visualizza le vostre immagini
+        if os.path.exists("ascii.png"):
+            st.image("ascii.png", caption="[ENCRYPTED_VISUAL]", use_container_width=True)
         
-        if st.button("RELOG TO SYSTEM"):
-            st.session_state.stage = 'lock'
+        st.success("SUCCESS: Sei entrato nel 2026 dalla porta sul retro! 🍻")
+
+        if os.path.exists("foto.png"):
+            st.image("foto.png", caption="THE CREW", use_container_width=True)
+        
+        st.markdown("<p class='terminal-font' style='color:#ff00ff; text-align:center;'>session_status: UNLIMITED_ACCESS</p>", unsafe_allow_html=True)
+        
+        if st.button("LOGOUT FROM CLUB"):
+            st.session_state.access_granted = False
             st.rerun()
 
 if __name__ == "__main__":

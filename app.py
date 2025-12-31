@@ -19,14 +19,13 @@ def get_audio_b64(file_path):
             return None
     return None
 
-# --- CSS GLOBALE ---
+# --- CSS GLOBALE (Invariato come richiesto) ---
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
 .stApp { background-color: #050505 !important; }
 header, footer, #MainMenu {visibility: hidden;}
 
-/* Titoli Neon */
 .pink-neon { 
     color: #ff00ff; text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff; 
     font-family: 'Orbitron', sans-serif; font-size: clamp(24px, 8vw, 60px); 
@@ -40,7 +39,6 @@ header, footer, #MainMenu {visibility: hidden;}
     text-transform: uppercase; margin-bottom: 20px;
 }
 
-/* 2026 UNLOCKED */
 .unlocked-title {
     color: white; font-family: 'Orbitron', sans-serif; 
     font-size: clamp(38px, 12vw, 90px); 
@@ -49,7 +47,6 @@ header, footer, #MainMenu {visibility: hidden;}
     width: 100%; margin: 20px 0; line-height: 1.1;
 }
 
-/* Box Buon Anno Custom */
 .custom-success-box {
     background-color: rgba(0, 255, 65, 0.1);
     border: 2px solid #00ff41;
@@ -89,21 +86,37 @@ def play_audio(file_name, loop=False):
     b64 = get_audio_b64(file_name)
     if b64:
         loop_attr = "loop" if loop else ""
-        # Script migliorato per forzare l'attivazione dopo il primo click dell'utente
+        # JavaScript estremo: tenta l'autoplay e si attiva al minimo movimento del mouse o tasto
         components.html(f"""
-            <audio id="audio-player" {loop_attr}>
+            <audio id="audio-player" {loop_attr} autoplay>
                 <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
             </audio>
             <script>
                 const audio = document.getElementById('audio-player');
-                // Prova a farlo partire subito
-                audio.play().catch(e => {{
-                    console.log("Autoplay bloccato. In attesa di interazione.");
-                    // Se bloccato, parte al primo click sulla pagina
-                    window.parent.document.addEventListener('click', () => {{
-                        audio.play();
-                    }}, {{ once: true }});
-                }});
+                
+                function forcePlay() {{
+                    audio.play().then(() => {{
+                        console.log("Audio started");
+                        // Rimuove i listener una volta partito
+                        cleanup();
+                    }}).catch(e => console.log("Waiting for interaction..."));
+                }}
+
+                function cleanup() {{
+                    window.parent.document.removeEventListener('mousemove', forcePlay);
+                    window.parent.document.removeEventListener('keydown', forcePlay);
+                    window.parent.document.removeEventListener('touchstart', forcePlay);
+                    window.parent.document.removeEventListener('wheel', forcePlay);
+                }}
+
+                // Prova subito
+                forcePlay();
+
+                // Listener su ogni possibile interazione minima
+                window.parent.document.addEventListener('mousemove', forcePlay);
+                window.parent.document.addEventListener('keydown', forcePlay);
+                window.parent.document.addEventListener('touchstart', forcePlay);
+                window.parent.document.addEventListener('wheel', forcePlay);
             </script>
         """, height=0)
 

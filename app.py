@@ -161,7 +161,7 @@ def main():
             play_audio("scena1.mp3", loop=True)
             pwd = st.text_input("ACCESS KEY:", type="password", key="p_in")
             if st.button("AUTHORIZE ENTRANCE"):
-                if pwd.lower().strip() == "locandieri":
+                if pwd.lower().strip() == "locanda2026":
                     st.session_state.state = 'hacking'
                     main_placeholder.empty()
                     st.rerun()
@@ -215,4 +215,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

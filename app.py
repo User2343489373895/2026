@@ -195,7 +195,7 @@ elif st.session_state.state == 'party':
 
     with placeholder.container():
         # Pioggia Emoji (Renderizzata SOLO qui)
-        chars = [""0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
+        chars = ["0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
         rain_html = '<div style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.3;">'
         for i in range(25):
             left = i * 4
@@ -219,3 +219,4 @@ elif st.session_state.state == 'party':
         if st.button("TERMINATE CONNECTION"):
             st.session_state.state = 'login'
             st.rerun()
+

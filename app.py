@@ -18,7 +18,7 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS GLOBALE RESPONSIVE ---
+# --- CSS GLOBALE DEFINITIVO ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
@@ -26,70 +26,65 @@ st.markdown("""
     .stApp { background-color: #050505 !important; overflow-x: hidden; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Titoli (Login e Hacking) */
+    /* Container per allineamento perfetto titoli */
+    .header-container {
+        text-align: center;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
     .pink-neon { 
         color: #ff00ff; 
         text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
         font-family: 'Orbitron', sans-serif; 
-        text-align: center; 
-        /* Minimo 14px per far stare "OVERRIDING VIP SERVER" su mobile */
-        font-size: clamp(14px, 6vw, 48px); 
+        font-size: clamp(20px, 8vw, 55px); 
         font-weight: 900; 
-        margin-bottom: 5px;
-        width: 100%;
-        white-space: nowrap;
-        display: block;
+        margin: 0;
+        line-height: 1.1;
     }
 
     .cyan-sub {
         color: #00ffff;
         text-shadow: 0 0 8px #00ffff;
         font-family: 'Orbitron', sans-serif;
-        text-align: center;
-        font-size: clamp(12px, 3.5vw, 18px);
+        font-size: clamp(12px, 3.5vw, 20px);
         font-weight: bold;
-        margin-top: 0px;
+        margin: 5px 0 0 0;
         letter-spacing: 2px;
-        width: 100%;
-        white-space: nowrap;
-        display: block;
+        text-transform: uppercase;
     }
 
-    /* Box Successo 🥂 */
+    /* Titolo 2026 UNLOCKED - Massiccio su Desktop */
+    .unlocked-title {
+        color: white; 
+        font-family: 'Orbitron', sans-serif; 
+        font-size: clamp(28px, 12vw, 120px); 
+        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
+        text-align: center;
+        margin: 20px 0;
+        line-height: 1;
+    }
+
+    /* Box Successo Personalizzato */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
         color: #00ff41;
         border-radius: 10px;
-        padding: clamp(10px, 3vw, 25px);
+        padding: 20px;
         text-align: center;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(14px, 4.5vw, 30px);
+        font-size: clamp(16px, 5vw, 32px);
         font-weight: bold;
         text-shadow: 0 0 15px #00ff41;
         margin: 20px auto;
         width: 100%;
-        white-space: nowrap;
-    }
-
-    /* Titolo 2026 UNLOCKED - Ingrandito per Desktop */
-    .unlocked-title {
-        color: white; 
-        font-family: 'Orbitron', sans-serif; 
-        /* Aumentato il massimo a 100px per Desktop */
-        font-size: clamp(24px, 12vw, 100px); 
-        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
-        text-align: center;
-        white-space: nowrap;
-        position: relative;
-        z-index: 10;
-        margin: 20px 0;
     }
 
     .terminal-text {
         font-family: 'Fira Code', monospace; 
         color: #00ff41; 
-        font-size: clamp(11px, 2.8vw, 14px);
+        font-size: clamp(13px, 3vw, 16px); /* Ingrandito per mobile */
         background: rgba(0, 255, 65, 0.1); 
         padding: 12px; 
         border-left: 3px solid #00ff41; 
@@ -106,8 +101,6 @@ st.markdown("""
     }
 
     iframe { position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important; border: none; pointer-events: none; z-index: 5; }
-    
-    [data-testid="column"] { display: flex; justify-content: center; align-items: center; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -135,7 +128,7 @@ def show_party_visuals():
     class Particle {
         constructor(x,y,color,sx,sy){this.x=x;this.y=y;this.color=color;this.sx=sx;this.sy=sy;this.life=1.0;}
         draw(){ctx.globalAlpha=this.life; ctx.fillStyle=this.color; ctx.beginPath(); ctx.arc(this.x,this.y,2,0,Math.PI*2); ctx.fill();}
-        update(){this.x+=this.sx;this.y+=this.sy;this.sy+=0.06;this.life-=0.025;}
+        update(){this.x+=this.sx;this.y+=this.sy;this.sy+=0.06;this.life-=0.02;}
     }
     class Firework {
         constructor(){
@@ -148,7 +141,7 @@ def show_party_visuals():
             this.x+=this.sx; this.y+=this.sy; this.sy+=0.1;
             if(this.sy>=-0.5){
                 this.ex=true;
-                for(let i=0;i<35;i++){
+                for(let i=0;i<40;i++){
                     const ang=Math.random()*Math.PI*2, spd=Math.random()*5+2;
                     particles.push(new Particle(this.x,this.y,this.color,Math.cos(ang)*spd,Math.sin(ang)*spd));
                 }
@@ -173,8 +166,13 @@ def main():
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
-            st.markdown("<h1 class='pink-neon'>THE BACKDOOR</h1>", unsafe_allow_html=True)
-            st.markdown("<p class='cyan-sub'>SECURE VIP ENTRANCE</p>", unsafe_allow_html=True)
+            # TITOLI RAGGRUPPATI PER CENTRATURA PERFETTA
+            st.markdown("""
+                <div class='header-container'>
+                    <h1 class='pink-neon'>THE BACKDOOR</h1>
+                    <p class='cyan-sub'>SECURE VIP ENTRANCE</p>
+                </div>
+            """, unsafe_allow_html=True)
             
             c1, c2, c3 = st.columns([0.05, 0.9, 0.05])
             with c2:
@@ -195,7 +193,6 @@ def main():
             st.markdown("<h2 class='pink-neon'>OVERRIDING VIP SERVER...</h2>", unsafe_allow_html=True)
             log_area = st.empty()
             full_log = ""
-            # TESTI ORIGINALI RIPRISTINATI
             steps = [
                 ("> Initializing 'Seductive_Handshake' protocol...", 1.2), 
                 ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5), 
@@ -203,7 +200,7 @@ def main():
                 ("> Escalating privileges: Root granted.", 1.5), 
                 ("> Extracting 'Secret_Payload.bin'...", 2.0), 
                 ("> SUCCESS: Access granted.", 1.2), 
-                ("> WELCOME!", 1.2)
+                ("> WELCOME!", 1.5)
             ]
             for text, delay in steps:
                 full_log += f"<div class='terminal-text'>{text}</div>"
@@ -218,21 +215,18 @@ def main():
             play_audio("musica.mp3", loop=False)
             show_party_visuals()
             
-            # 1. ASCII SOPRA
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # 2. TITOLO 2026 UNLOCKED (DIMENSIONI DESKTOP FIX)
+            # TITOLO MASSICCIO
             st.markdown("<h1 class='unlocked-title'>2026 UNLOCKED</h1>", unsafe_allow_html=True)
             
-            # 3. BOX SUCCESSO
             st.markdown("""
                 <div class="custom-success-box">
                     🥂 BUON ANNO, LOCANDIERI! 🥂
                 </div>
                 """, unsafe_allow_html=True)
             
-            # 4. FOTO FINALE
             if os.path.exists("foto.png"): 
                 st.image("foto.png", use_container_width=True)
             

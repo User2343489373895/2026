@@ -1,4 +1,3 @@
-
 import streamlit as st
 import time
 import os
@@ -19,26 +18,28 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS GLOBALE (Rifinito per centratura) ---
+# --- CSS GLOBALE ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
     .stApp { background-color: #050505 !important; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Titoli Hacker */
+    /* Titoli Neon */
     .pink-neon { 
-        color: #ff00ff; text-shadow: 0 0 15px #ff00ff; 
-        font-family: 'Orbitron', sans-serif; font-size: clamp(24px, 8vw, 55px); 
+        color: #ff00ff; text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff; 
+        font-family: 'Orbitron', sans-serif; font-size: clamp(24px, 8vw, 60px); 
         font-weight: 900; text-align: center; margin-top: 20px;
+        line-height: 1.2;
     }
     .cyan-sub {
         color: #00ffff; text-shadow: 0 0 8px #00ffff;
-        font-family: 'Orbitron', sans-serif; font-size: clamp(12px, 4vw, 20px);
-        font-weight: bold; text-align: center; letter-spacing: 2px; text-transform: uppercase;
+        font-family: 'Orbitron', sans-serif; font-size: clamp(12px, 4vw, 22px);
+        font-weight: bold; text-align: center; letter-spacing: 4px; 
+        text-transform: uppercase; margin-bottom: 20px;
     }
 
-    /* 2026 UNLOCKED - Centrato e proporzionato */
+    /* 2026 UNLOCKED */
     .unlocked-title {
         color: white; font-family: 'Orbitron', sans-serif; 
         font-size: clamp(38px, 12vw, 90px); 
@@ -47,7 +48,7 @@ st.markdown("""
         width: 100%; margin: 20px 0; line-height: 1.1;
     }
     
-    * BUON ANNO LOCANDIERI - Box robusto che non si storce */
+    /* Box Buon Anno Custom */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
@@ -59,33 +60,15 @@ st.markdown("""
         font-weight: bold;
         text-shadow: 0 0 10px #00ff41;
         width: 100%;
-        max-width: 700px;
         margin: 20px auto;
         text-align: center;
-        display: flex; justify-content: center; align-items: center;
-        box-sizing: border-box;
     }
+
     .terminal-text {
         font-family: 'Fira Code', monospace; color: #00ff41; font-size: 14px;
         background: rgba(0, 255, 65, 0.1); padding: 15px; border-left: 3px solid #00ff41; margin-bottom: 5px;
     }
     
-    /* FIX CENTRATURA SCRITTA SUCCESS */
-    div[data-testid="stNotification"] {
-        text-align: center !important;
-    }
-    div[data-testid="stNotificationContent"] {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        text-align: center !important;
-        width: 100% !important;
-    }
-    div[data-testid="stNotificationContent"] > div {
-        font-family: 'Orbitron', sans-serif !important;
-        width: 100%;
-    }
-
     .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
     .bit { position: absolute; top: -30px; font-family: monospace; font-size: 20px; animation: fall linear infinite; }
     @keyframes fall { to { transform: translateY(110vh); } }
@@ -94,7 +77,7 @@ st.markdown("""
         background-color: transparent !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
         font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 10px #ff00ff; height: 50px;
     }
-    /* Iframe dei fuochi a tutto schermo */
+    
     iframe { position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important; border: none; pointer-events: none; z-index: 5; }
     </style>
     """, unsafe_allow_html=True)
@@ -107,7 +90,6 @@ def play_audio(file_name, loop=False):
         components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
 
 def show_party_visuals():
-    # Pioggia di bit (CSS)
     chars = ["0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
     rain_html = '<div class="matrix-rain">'
     for i in range(50):
@@ -115,7 +97,6 @@ def show_party_visuals():
         rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; animation-duration:{random.uniform(2,5)}s;">{random.choice(chars)}</div>'
     st.markdown(rain_html + '</div>', unsafe_allow_html=True)
     
-    # Fuochi d'artificio "Exploding" (JS Canvas)
     components.html("""
     <canvas id="f"></canvas>
     <script>
@@ -169,11 +150,14 @@ def main():
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
-            st.markdown("<h1 class='neon-text'>THE BACKDOOR</h1>", unsafe_allow_html=True)
-            st.markdown("<p style='color:#ff00ff; text-align:center; font-family:Orbitron;'>SECURE VIP ENTRANCE</p>", unsafe_allow_html=True)
-            c1, c2, c3 = st.columns([1, 2, 1])
+            # Stile scritte iniziali aggiustato
+            st.markdown("<div class='pink-neon'>THE BACKDOOR</div>", unsafe_allow_html=True)
+            st.markdown("<div class='cyan-sub'>SECURE VIP ENTRANCE</div>", unsafe_allow_html=True)
+            
+            c1, c2, c3 = st.columns([1, 3, 1])
             with c2:
                 st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
+            
             play_audio("scena1.mp3", loop=True)
             pwd = st.text_input("ACCESS KEY:", type="password", key="p_in")
             if st.button("AUTHORIZE ENTRANCE"):
@@ -186,7 +170,7 @@ def main():
     elif st.session_state.state == 'hacking':
         with main_placeholder.container():
             play_audio("scena2.mp3", loop=False)
-            st.markdown("<h2 class='pink-neon'>OVERRIDING VIP SERVER...</h2>", unsafe_allow_html=True)
+            st.markdown("<div class='pink-neon'>OVERRIDING VIP SERVER...</div>", unsafe_allow_html=True)
             log_area = st.empty()
             full_log = ""
             steps = [
@@ -210,12 +194,20 @@ def main():
         with main_placeholder.container():
             play_audio("musica.mp3", loop=False)
             show_party_visuals()
-            st.markdown("<div style='text-align: center; position: relative; z-index: 10;'><h1 style='color: white; font-family: Orbitron; font-size: 50px; text-shadow: 0 0 20px #ff00ff;'>2026 UNLOCKED</h1></div>", unsafe_allow_html=True)
-            if os.path.exists("ascii.png"): st.image("ascii.png", use_container_width=True)
             
-            st.success("🥂 BUON ANNO, LOCANDIERI! 🥂")
+            # 1. Immagine ASCII prima
+            if os.path.exists("ascii.png"): 
+                st.image("ascii.png", use_container_width=True)
             
-            if os.path.exists("foto.png"): st.image("foto.png", use_container_width=True)
+            # 2. Scritta 2026 UNLOCKED dopo
+            st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
+            
+            # 3. Messaggio Buon Anno
+            st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
+            
+            if os.path.exists("foto.png"): 
+                st.image("foto.png", use_container_width=True)
+                
             if st.button("TERMINATE CONNECTION"):
                 st.session_state.state = 'login'
                 main_placeholder.empty()

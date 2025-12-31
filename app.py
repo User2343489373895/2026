@@ -26,32 +26,27 @@ st.markdown("""
     header, footer, #MainMenu {visibility: hidden;}
     
     .neon-text { font-family: 'Orbitron', sans-serif; color: #00ffff; text-shadow: 0 0 10px #00ffff; text-align: center; }
-    .pink-neon { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; font-family: 'Orbitron', sans-serif; text-align: center; font-size: 32px; font-weight: 900; }
+    .pink-neon { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; font-family: 'Orbitron', sans-serif; text-align: center; font-size: 42px; font-weight: 900; }
     
+    /* Stile per il Box di Successo Personalizzato */
+    .custom-success-box {
+        background-color: rgba(0, 255, 65, 0.1);
+        border: 2px solid #00ff41;
+        color: #00ff41;
+        border-radius: 10px;
+        padding: 25px;
+        text-align: center;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 30px;
+        font-weight: bold;
+        text-shadow: 0 0 15px #00ff41;
+        margin: 20px 0;
+        width: 100%;
+    }
+
     .terminal-text {
         font-family: 'Fira Code', monospace; color: #00ff41; font-size: 14px;
         background: rgba(0, 255, 65, 0.1); padding: 15px; border-left: 3px solid #00ff41; margin-bottom: 5px;
-    }
-    
-    /* FIX CENTRATURA SCRITTA SUCCESS TOTALE */
-    div[data-testid="stNotification"] {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        background-color: transparent !important;
-    }
-    /* Nasconde l'icona per permettere la centratura perfetta del testo */
-    div[data-testid="stNotification"] svg {
-        display: none !important;
-    }
-    div[data-testid="stNotificationContent"] {
-        text-align: center !important;
-        width: 100% !important;
-    }
-    div[data-testid="stNotificationContent"] div {
-        font-family: 'Orbitron', sans-serif !important;
-        justify-content: center !important;
-        font-size: 20px !important;
     }
 
     .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
@@ -128,9 +123,9 @@ def main():
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
-            # INVERSIONE COLORI: Titolo Pink, Sottotitolo Cyan
+            # Inversione Colori e Font Originale Orbitron
             st.markdown("<h1 class='pink-neon'>THE BACKDOOR</h1>", unsafe_allow_html=True)
-            st.markdown("<p style='color:#00ffff; text-align:center; font-family:Orbitron; font-weight:bold;'>SECURE VIP ENTRANCE</p>", unsafe_allow_html=True)
+            st.markdown("<p style='color:#00ffff; text-align:center; font-family:\"Orbitron\", sans-serif; font-size: 18px; font-weight: bold; text-shadow: 0 0 8px #00ffff;'>SECURE VIP ENTRANCE</p>", unsafe_allow_html=True)
             
             c1, c2, c3 = st.columns([1, 2, 1])
             with c2:
@@ -151,7 +146,7 @@ def main():
             st.markdown("<h2 class='pink-neon'>OVERRIDING VIP SERVER...</h2>", unsafe_allow_html=True)
             log_area = st.empty()
             full_log = ""
-            steps = [("> Initializing 'Seductive_Handshake' protocol...", 1.2), ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5), ("> Deep Packet Inspection of 'Private_Area'...", 1.8), ("> Escalating privileges: Root granted.", 1.5), ("> Extracting 'Secret_Payload.bin'...", 2.0), ("> SUCCESS: Access granted.", 1.0), ("Welcome!", 1.2)]
+            steps = [("> Initializing 'Seductive_Handshake' protocol...", 1.2), ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5), ("> Deep Packet Inspection of 'Private_Area'...", 1.8), (> "Escalating privileges: Root granted.", 1.5), ("> Extracting 'Secret_Payload.bin'...", 2.0), ("> SUCCESS: Access granted.", 1.0), ("> WELCOME!", 1.2)]
             for text, delay in steps:
                 full_log += f"<div class='terminal-text'>{text}</div>"
                 log_area.markdown(full_log, unsafe_allow_html=True)
@@ -169,8 +164,12 @@ def main():
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # BOX CENTRATA (L'icona è stata rimossa via CSS per permettere la centratura perfetta)
-            st.success("🥂 BUON ANNO, LOCANDIERI! 🥂")
+            # --- NUOVO BOX DI SUCCESSO PERSONALIZZATO (Centrato e Ingrandito)
+            st.markdown("""
+                <div class="custom-success-box">
+                    🥂 BUON ANNO, LOCANDIERI! 🥂
+                </div>
+                """, unsafe_allow_html=True)
             
             if os.path.exists("foto.png"): 
                 st.image("foto.png", use_container_width=True)

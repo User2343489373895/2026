@@ -18,7 +18,7 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS GLOBALE RESPONSIVE (MIGLIORATO) ---
+# --- CSS GLOBALE RESPONSIVE ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
@@ -26,14 +26,14 @@ st.markdown("""
     .stApp { background-color: #050505 !important; overflow-x: hidden; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Titoli Principali (Login e Hacking) */
+    /* Titoli (Login e Hacking) */
     .pink-neon { 
         color: #ff00ff; 
         text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
         font-family: 'Orbitron', sans-serif; 
         text-align: center; 
-        /* clamp(min, pref, max) - Ridotto il min per far stare "OVERRIDING VIP SERVER" su mobile */
-        font-size: clamp(16px, 6vw, 48px); 
+        /* Minimo 14px per far stare "OVERRIDING VIP SERVER" su mobile */
+        font-size: clamp(14px, 6vw, 48px); 
         font-weight: 900; 
         margin-bottom: 5px;
         width: 100%;
@@ -41,7 +41,6 @@ st.markdown("""
         display: block;
     }
 
-    /* Sottotitolo Login */
     .cyan-sub {
         color: #00ffff;
         text-shadow: 0 0 8px #00ffff;
@@ -77,8 +76,8 @@ st.markdown("""
     .unlocked-title {
         color: white; 
         font-family: 'Orbitron', sans-serif; 
-        /* Aumentato il max a 80px e il pref a 10vw per impatto su desktop */
-        font-size: clamp(24px, 10vw, 80px); 
+        /* Aumentato il massimo a 100px per Desktop */
+        font-size: clamp(24px, 12vw, 100px); 
         text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
         text-align: center;
         white-space: nowrap;
@@ -95,7 +94,6 @@ st.markdown("""
         padding: 12px; 
         border-left: 3px solid #00ff41; 
         margin-bottom: 5px;
-        word-wrap: break-word;
     }
 
     .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
@@ -194,17 +192,18 @@ def main():
     elif st.session_state.state == 'hacking':
         with main_placeholder.container():
             play_audio("scena2.mp3", loop=False)
-            # Qui il clamp dinamico gestisce la lunghezza della stringa
             st.markdown("<h2 class='pink-neon'>OVERRIDING VIP SERVER...</h2>", unsafe_allow_html=True)
             log_area = st.empty()
             full_log = ""
+            # TESTI ORIGINALI RIPRISTINATI
             steps = [
-                ("> Initializing protocol...", 1.2), 
-                ("> Bypassing IDS/IPS...", 1.5), 
-                ("> Deep Packet Inspection...", 1.8), 
-                ("> Escalating privileges...", 1.5), 
-                ("> SUCCESS: Access granted.", 1.2),
-                (">WELCOME!", 1.2)
+                ("> Initializing 'Seductive_Handshake' protocol...", 1.2), 
+                ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5), 
+                ("> Deep Packet Inspection of 'Private_Area'...", 1.8), 
+                ("> Escalating privileges: Root granted.", 1.5), 
+                ("> Extracting 'Secret_Payload.bin'...", 2.0), 
+                ("> SUCCESS: Access granted.", 1.2), 
+                ("> WELCOME!", 1.2)
             ]
             for text, delay in steps:
                 full_log += f"<div class='terminal-text'>{text}</div>"
@@ -219,11 +218,11 @@ def main():
             play_audio("musica.mp3", loop=False)
             show_party_visuals()
             
-            # 1. ASCII (Invertito come richiesto)
+            # 1. ASCII SOPRA
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # 2. TITOLO (Ingrandito per desktop, responsive per mobile)
+            # 2. TITOLO 2026 UNLOCKED (DIMENSIONI DESKTOP FIX)
             st.markdown("<h1 class='unlocked-title'>2026 UNLOCKED</h1>", unsafe_allow_html=True)
             
             # 3. BOX SUCCESSO
@@ -233,7 +232,7 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
             
-            # 4. FOTO
+            # 4. FOTO FINALE
             if os.path.exists("foto.png"): 
                 st.image("foto.png", use_container_width=True)
             

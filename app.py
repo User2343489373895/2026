@@ -5,7 +5,7 @@ import base64
 import random
 import streamlit.components.v1 as components
 
-# 1. Configurazione (Deve essere la prima istruzione)
+# 1. Configurazione
 st.set_page_config(page_title="Exclusive VIP Lounge 💎", page_icon="🔞", layout="centered")
 
 # --- CACHE AUDIO ---
@@ -18,7 +18,7 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS GLOBALE RESPONSIVE ---
+# --- CSS GLOBALE RESPONSIVE (FIX MOBILE) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
@@ -26,73 +26,83 @@ st.markdown("""
     .stApp { background-color: #050505 !important; overflow-x: hidden; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Font che si adattano allo schermo */
+    /* Titolo Login - Pink Neon */
     .pink-neon { 
         color: #ff00ff; 
         text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
         font-family: 'Orbitron', sans-serif; 
         text-align: center; 
-        font-size: clamp(28px, 8vw, 48px); /* Responsive: min 28px, ideale 8% larghezza, max 48px */
+        font-size: clamp(22px, 7vw, 48px); /* Ridotto il minimo per mobile */
         font-weight: 900; 
         margin-bottom: 5px;
         width: 100%;
+        white-space: nowrap; /* Impedisce di andare a capo */
         display: block;
     }
 
+    /* Sottotitolo Login - Cyan */
     .cyan-sub {
         color: #00ffff;
         text-shadow: 0 0 8px #00ffff;
         font-family: 'Orbitron', sans-serif;
         text-align: center;
-        font-size: clamp(14px, 4vw, 18px);
+        font-size: clamp(12px, 3.5vw, 18px);
         font-weight: bold;
         margin-top: 0px;
         letter-spacing: 2px;
         width: 100%;
+        white-space: nowrap;
         display: block;
     }
 
-    /* Box di Successo HTML (Mobile Friendly) */
+    /* Box di Successo HTML - Buon Anno */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
         color: #00ff41;
         border-radius: 10px;
-        padding: clamp(15px, 4vw, 30px);
+        padding: clamp(10px, 3vw, 25px);
         text-align: center;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(16px, 5vw, 28px);
+        font-size: clamp(14px, 4.5vw, 30px); /* Ridotto per mobile */
         font-weight: bold;
         text-shadow: 0 0 15px #00ff41;
         margin: 20px auto;
-        width: 90%;
+        width: 100%;
+        white-space: nowrap; /* Forza il testo su una riga */
+    }
+
+    /* Titolo Finale - 2026 Unlocked */
+    .unlocked-title {
+        color: white; 
+        font-family: 'Orbitron', sans-serif; 
+        font-size: clamp(24px, 8vw, 55px); 
+        text-shadow: 0 0 20px #ff00ff;
+        text-align: center;
+        white-space: nowrap;
+        position: relative;
+        z-index: 10;
+        margin-top: 10px;
     }
 
     .terminal-text {
-        font-family: 'Fira Code', monospace; color: #00ff41; font-size: clamp(12px, 3vw, 14px);
-        background: rgba(0, 255, 65, 0.1); padding: 15px; border-left: 3px solid #00ff41; margin-bottom: 5px;
+        font-family: 'Fira Code', monospace; color: #00ff41; font-size: clamp(11px, 2.8vw, 14px);
+        background: rgba(0, 255, 65, 0.1); padding: 12px; border-left: 3px solid #00ff41; margin-bottom: 5px;
     }
 
-    /* Matrix Rain */
     .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
     .bit { position: absolute; top: -30px; font-family: monospace; font-size: 18px; animation: fall linear infinite; }
     @keyframes fall { to { transform: translateY(110vh); } }
     
-    /* Bottoni */
     div.stButton > button {
         background-color: transparent !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
         font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 10px #ff00ff; height: 50px;
     }
 
-    /* Iframe Fuochi */
     iframe { position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important; border: none; pointer-events: none; z-index: 5; }
     
-    /* Fix per centratura colonne Streamlit su Desktop */
-    [data-testid="column"] {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    /* Centratura colonne */
+    [data-testid="column"] { display: flex; justify-content: center; align-items: center; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -106,8 +116,8 @@ def play_audio(file_name, loop=False):
 def show_party_visuals():
     chars = ["$", "0", "1", "🥂", "✨", "💎", "🍑" , "2", "0", "2", "6"]
     rain_html = '<div class="matrix-rain">'
-    for i in range(40): # Ridotto per mobile performance
-        left = i * 2.5
+    for i in range(35): # Alleggerito per mobile
+        left = i * 2.8
         rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; animation-duration:{random.uniform(2,5)}s;">{random.choice(chars)}</div>'
     st.markdown(rain_html + '</div>', unsafe_allow_html=True)
     
@@ -120,7 +130,7 @@ def show_party_visuals():
     class Particle {
         constructor(x,y,color,sx,sy){this.x=x;this.y=y;this.color=color;this.sx=sx;this.sy=sy;this.life=1.0;}
         draw(){ctx.globalAlpha=this.life; ctx.fillStyle=this.color; ctx.beginPath(); ctx.arc(this.x,this.y,2,0,Math.PI*2); ctx.fill();}
-        update(){this.x+=this.sx;this.y+=this.sy;this.sy+=0.05;this.life-=0.02;}
+        update(){this.x+=this.sx;this.y+=this.sy;this.sy+=0.06;this.life-=0.025;}
     }
     class Firework {
         constructor(){
@@ -133,7 +143,7 @@ def show_party_visuals():
             this.x+=this.sx; this.y+=this.sy; this.sy+=0.1;
             if(this.sy>=-0.5){
                 this.ex=true;
-                for(let i=0;i<40;i++){
+                for(let i=0;i<35;i++){
                     const ang=Math.random()*Math.PI*2, spd=Math.random()*5+2;
                     particles.push(new Particle(this.x,this.y,this.color,Math.cos(ang)*spd,Math.sin(ang)*spd));
                 }
@@ -158,11 +168,10 @@ def main():
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
-            # Titoli con classi Responsive
             st.markdown("<h1 class='pink-neon'>THE BACKDOOR</h1>", unsafe_allow_html=True)
             st.markdown("<p class='cyan-sub'>SECURE VIP ENTRANCE</p>", unsafe_allow_html=True)
             
-            c1, c2, c3 = st.columns([0.1, 0.8, 0.1])
+            c1, c2, c3 = st.columns([0.05, 0.9, 0.05])
             with c2:
                 st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
             
@@ -186,7 +195,8 @@ def main():
                 ("> Bypassing IDS/IPS...", 1.5), 
                 ("> Deep Packet Inspection...", 1.8), 
                 ("> Escalating privileges...", 1.5), 
-                ("> SUCCESS: Access granted.", 1.0)
+                ("> SUCCESS: Access granted.", 1.0),
+                ("> WELCOME!", 1.2)
             ]
             for text, delay in steps:
                 full_log += f"<div class='terminal-text'>{text}</div>"
@@ -201,21 +211,21 @@ def main():
             play_audio("musica.mp3", loop=False)
             show_party_visuals()
             
-            # 1. IMMAGINE ASCII PRIMA DEL TITOLO
+            # 1. ASCII
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # 2. TITOLO 2026 UNLOCKED
-            st.markdown("<div style='text-align: center; position: relative; z-index: 10;'><h1 style='color: white; font-family: Orbitron; font-size: clamp(30px, 10vw, 55px); text-shadow: 0 0 20px #ff00ff;'>2026 UNLOCKED</h1></div>", unsafe_allow_html=True)
+            # 2. TITOLO (Fix Mobile Nowrap)
+            st.markdown("<h1 class='unlocked-title'>2026 UNLOCKED</h1>", unsafe_allow_html=True)
             
-            # 3. BOX SUCCESSO PERSONALIZZATO
+            # 3. BOX SUCCESSO (Fix Mobile Nowrap)
             st.markdown("""
                 <div class="custom-success-box">
                     🥂 BUON ANNO, LOCANDIERI! 🥂
                 </div>
                 """, unsafe_allow_html=True)
             
-            # 4. FOTO FINALE
+            # 4. FOTO
             if os.path.exists("foto.png"): 
                 st.image("foto.png", use_container_width=True)
             

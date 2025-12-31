@@ -5,7 +5,7 @@ import base64
 import random
 import streamlit.components.v1 as components
 
-# 1. Configurazione (Prima di tutto)
+# 1. Configurazione (Deve essere la prima)
 st.set_page_config(page_title="Exclusive VIP Lounge 💎", page_icon="🔞", layout="centered")
 
 # --- CACHE AUDIO ---
@@ -18,44 +18,40 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-def play_audio(file_name, loop=False):
-    b64 = get_audio_b64(file_name)
-    if b64:
-        loop_attr = "loop" if loop else ""
-        components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
-
-# --- CSS GLOBALE (Risolve Spazi e Allineamento) ---
+# --- CSS GLOBALE ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
     
     /* Rimuove lo spazio bianco in alto */
     .block-container { padding-top: 0rem !important; }
-    .stApp { background-color: #050505 !important; }
+    .stApp { background-color: #050505 !important; overflow-x: hidden; }
     header, footer, #MainMenu {visibility: hidden;}
-
-    /* Titoli Hacker */
+    
+    /* Login Titles */
     .pink-neon { 
         color: #ff00ff; text-shadow: 0 0 15px #ff00ff; 
-        font-family: 'Orbitron', sans-serif; font-size: clamp(24px, 8vw, 55px); 
-        font-weight: 900; text-align: center; margin-top: 20px;
+        font-family: 'Orbitron', sans-serif; font-size: clamp(24px, 8vw, 60px); 
+        font-weight: 900; line-height: 1.2; text-align: center;
     }
     .cyan-sub {
         color: #00ffff; text-shadow: 0 0 8px #00ffff;
-        font-family: 'Orbitron', sans-serif; font-size: clamp(12px, 4vw, 20px);
-        font-weight: bold; text-align: center; letter-spacing: 2px; text-transform: uppercase;
+        font-family: 'Orbitron', sans-serif; font-size: clamp(14px, 4vw, 22px);
+        font-weight: bold; letter-spacing: 2px; text-transform: uppercase; text-align: center;
     }
 
-    /* 2026 UNLOCKED - Centrato e proporzionato */
+    /* 2026 UNLOCKED - NON TOCCARE */
     .unlocked-title {
-        color: white; font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(38px, 12vw, 90px); 
-        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
-        font-weight: 900; text-align: center;
-        width: 100%; margin: 20px 0; line-height: 1.1;
+        color: white; 
+        font-family: 'Orbitron', sans-serif; 
+        font-size: clamp(40px, 15vw, 130px); 
+        text-shadow: 0 0 20px #ff00ff, 0 0 50px #ff00ff;
+        line-height: 1;
+        margin: 20px 0;
+        text-align: center;
     }
 
-    /* BUON ANNO LOCANDIERI - Box robusto che non si storce */
+    /* BOX BUON ANNO - FIX MOBILE/DESKTOP */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
@@ -63,36 +59,55 @@ st.markdown("""
         border-radius: 12px;
         padding: 20px;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(16px, 5vw, 32px);
+        font-size: clamp(18px, 6vw, 40px);
         font-weight: bold;
-        text-shadow: 0 0 10px #00ff41;
+        text-shadow: 0 0 15px #00ff41;
         width: 100%;
-        max-width: 700px;
-        margin: 20px auto;
         text-align: center;
-        display: flex; justify-content: center; align-items: center;
+        margin: 15px 0;
+        white-space: nowrap; /* Desktop: non spezza */
         box-sizing: border-box;
+    }
+    @media (max-width: 600px) {
+        .custom-success-box {
+            white-space: normal; /* Mobile: permette adattamento se troppo stretto */
+            font-size: clamp(16px, 5vw, 22px);
+            line-height: 1.3;
+        }
     }
 
     .terminal-text {
-        font-family: 'Fira Code', monospace; color: #00ff41; font-size: 14px;
-        background: rgba(0, 255, 65, 0.05); padding: 12px; border-left: 3px solid #00ff41; 
+        font-family: 'Fira Code', monospace; 
+        color: #00ff41; font-size: clamp(12px, 3vw, 15px);
+        background: rgba(0, 255, 65, 0.1); padding: 12px; border-left: 3px solid #00ff41; 
         margin-bottom: 5px; text-align: left;
     }
 
-    /* Animazione Fall */
+    /* Matrix Rain FX */
+    .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
+    .bit { position: absolute; top: -30px; font-family: monospace; font-size: 18px; animation: fall linear infinite; }
     @keyframes fall { to { transform: translateY(110vh); } }
+    
+    div.stButton > button {
+        background-color: transparent !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
+        font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 10px #ff00ff; height: 50px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- LOGICA DI NAVIGAZIONE ---
+def play_audio(file_name, loop=False):
+    b64 = get_audio_b64(file_name)
+    if b64:
+        loop_attr = "loop" if loop else ""
+        components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
+
+# --- LOGICA NAVIGAZIONE ---
 if 'state' not in st.session_state:
     st.session_state.state = 'login'
 
-# Placeholder unico: pulisce TUTTO ad ogni cambio stato
 placeholder = st.empty()
 
-# --- 1. LOGIN ---
+# 1. LOGIN
 if st.session_state.state == 'login':
     with placeholder.container():
         st.markdown("<div class='pink-neon'>THE BACKDOOR</div><div class='cyan-sub'>SECURE VIP ENTRANCE</div>", unsafe_allow_html=True)
@@ -102,9 +117,9 @@ if st.session_state.state == 'login':
         if st.button("AUTHORIZE ENTRANCE"):
             if pwd.lower().strip() == "locandieri":
                 st.session_state.state = 'hacking'
-                st.rerun()
+                st.rerun() # Pulisce tutto e cambia pagina
 
-# --- 2. HACKING ---
+# 2. HACKING
 elif st.session_state.state == 'hacking':
     with placeholder.container():
         play_audio("scena2.mp3")
@@ -127,96 +142,69 @@ elif st.session_state.state == 'hacking':
         st.session_state.state = 'party'
         st.rerun()
 
-# --- 3. PARTY (PAGINA FINALE) ---
+# 3. PARTY
 elif st.session_state.state == 'party':
-    # VISUALS (Fuochi + Pioggia) - Caricati solo qui dentro
+    # FUOCHI E PIOGGIA CARICATI SOLO QUI
     components.html("""
-    <div id="visuals" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;">
-        <canvas id="fw"></canvas>
+    <div style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;">
+        <canvas id="f"></canvas>
     </div>
     <script>
-    const canvas = document.getElementById('fw');
-    const ctx = canvas.getContext('2d');
-    let w = canvas.width = window.innerWidth;
-    let h = canvas.height = window.innerHeight;
-    let particles = [];
-    let rockets = [];
-
-    class Rocket {
-        constructor() {
-            this.x = Math.random() * w;
-            this.y = h; // Parte esattamente dal basso
-            this.sy = Math.random() * -3 - 8; // Velocità verso l'alto
-            this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+    const c=document.getElementById('f'), x=c.getContext('2d');
+    let w=c.width=window.innerWidth, h=c.height=window.innerHeight;
+    let ps=[], fws=[];
+    window.onresize=()=>{w=c.width=window.innerWidth; h=c.height=window.innerHeight;};
+    class FW {
+        constructor(){
+            this.x=Math.random()*w; this.y=h; // Parte dal basso
+            this.color=`hsl(${Math.random()*360},100%,60%)`;
+            this.sy=Math.random()*-4-8; this.sx=Math.random()*2-1; this.ex=false;
         }
-        update() {
-            this.y += this.sy;
-            this.sy += 0.1; // Gravità che rallenta il razzo
-            if (this.sy >= 0) { // Al culmine esplode
-                for(let i=0; i<40; i++) particles.push(new Particle(this.x, this.y, this.color));
-                return false;
+        update(){
+            this.x+=this.sx; this.y+=this.sy; this.sy+=0.12;
+            if(this.sy>=-0.5){
+                this.ex=true;
+                for(let i=0;i<40;i++){
+                    const a=Math.random()*Math.PI*2, s=Math.random()*6+2;
+                    ps.push({x:this.x,y:this.y,c:this.color,sx:Math.cos(a)*s,sy:Math.sin(a)*s,l:1});
+                }
             }
-            return true;
         }
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath(); ctx.arc(this.x, this.y, 3, 0, Math.PI*2); ctx.fill();
-        }
+        draw(){ x.fillStyle=this.color; x.beginPath(); x.arc(this.x,this.y,3.5,0,7); x.fill(); }
     }
-
-    class Particle {
-        constructor(x, y, color) {
-            this.x = x; this.y = y; this.color = color;
-            this.dx = Math.random() * 6 - 3;
-            this.dy = Math.random() * 6 - 3;
-            this.alpha = 1;
-        }
-        update() {
-            this.x += this.dx; this.y += this.dy;
-            this.dy += 0.05; this.alpha -= 0.015;
-        }
-        draw() {
-            ctx.globalAlpha = this.alpha;
-            ctx.fillStyle = this.color;
-            ctx.beginPath(); ctx.arc(this.x, this.y, 2.5, 0, Math.PI*2); ctx.fill();
-        }
-    }
-
-    function anim() {
-        ctx.clearRect(0, 0, w, h);
-        if (Math.random() < 0.06) rockets.push(new Rocket());
-        rockets = rockets.filter(r => { r.draw(); return r.update(); });
-        particles = particles.filter(p => { p.draw(); p.update(); return p.alpha > 0; });
+    function anim(){
+        x.clearRect(0,0,w,h);
+        if(Math.random()<0.05) fws.push(new FW());
+        fws=fws.filter(f=>{f.update(); f.draw(); return !f.ex;});
+        ps=ps.filter(p=>{
+            x.globalAlpha=p.l; x.fillStyle=p.c; x.beginPath(); x.arc(p.x,p.y,2.5,0,7); x.fill();
+            p.x+=p.sx; p.y+=p.sy; p.sy+=0.06; p.l-=0.02; return p.l>0;
+        });
         requestAnimationFrame(anim);
-    }
-    anim();
+    } anim();
     </script>
     """, height=0)
 
     with placeholder.container():
-        # Pioggia Emoji (Renderizzata SOLO qui)
+        # Pioggia Matrix Emoji
         chars = ["0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
-        rain_html = '<div style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.3;">'
+        rain_html = '<div class="matrix-rain">'
         for i in range(25):
             left = i * 4
-            rain_html += f'<div style="position:absolute; left:{left}%; top:-50px; color:#ff00ff; font-size:24px; animation: fall {random.uniform(2,5)}s linear infinite;">{random.choice(chars)}</div>'
-        st.markdown(rain_html + "</div>", unsafe_allow_html=True)
+            rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; animation-duration:{random.uniform(2,5)}s;">{random.choice(chars)}</div>'
+        st.markdown(rain_html + '</div>', unsafe_allow_html=True)
 
         play_audio("musica.mp3", loop=True)
+        if os.path.exists("ascii.png"): st.image("ascii.png", use_container_width=True)
         
-        if os.path.exists("ascii.png"):
-            st.image("ascii.png", use_container_width=True)
-        
-        # 2026 UNLOCKED
+        # TITOLO 2026 - INVARIATO
         st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
         
-        # BUON ANNO LOCANDIERI
+        # BUON ANNO - FIXATO MOBILE
         st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
         
-        if os.path.exists("foto.png"):
-            st.image("foto.png", use_container_width=True)
-            
+        if os.path.exists("foto.png"): st.image("foto.png", use_container_width=True)
+        
         if st.button("TERMINATE CONNECTION"):
             st.session_state.state = 'login'
             st.rerun()
-

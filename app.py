@@ -18,90 +18,92 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS DEFINITIVO ---
+# --- CSS DEFINITIVO (PULITO E SENZA SPAZI VUOTI) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
     
-    .stApp { background-color: #050505 !important; overflow-x: hidden; }
+    /* Rimuove lo spazio bianco in alto tipico di Streamlit */
+    .block-container { padding-top: 1rem !important; }
+    .stApp { background-color: #050505 !important; }
     header, footer, #MainMenu {visibility: hidden;}
     
-    /* Titoli Login */
+    .center-box { text-align: center; width: 100%; display: block; margin: 0 auto; }
+
+    /* THE BACKDOOR (PINK) */
     .pink-neon { 
         color: #ff00ff; 
-        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
+        text-shadow: 0 0 15px #ff00ff; 
         font-family: 'Orbitron', sans-serif; 
-        text-align: center; 
-        font-size: clamp(28px, 8vw, 60px); 
+        font-size: clamp(24px, 8vw, 60px); 
         font-weight: 900; 
+        line-height: 1.2;
         margin-bottom: 5px;
     }
 
+    /* SECURE VIP ENTRANCE (CYAN) */
     .cyan-sub {
         color: #00ffff;
         text-shadow: 0 0 8px #00ffff;
         font-family: 'Orbitron', sans-serif;
-        text-align: center;
-        font-size: clamp(12px, 3.5vw, 20px);
+        font-size: clamp(14px, 4vw, 22px);
         font-weight: bold;
-        letter-spacing: 3px;
+        letter-spacing: 2px;
         text-transform: uppercase;
+        margin-top: 0;
     }
 
-    /* 2026 UNLOCKED - GIGANTE E PULSANTE */
+    /* 2026 UNLOCKED - GIGANTE */
     .unlocked-title {
         color: white; 
         font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(45px, 15vw, 120px); 
-        font-weight: 900;
-        text-align: center;
-        margin: 10px 0;
+        font-size: clamp(40px, 15vw, 130px); 
+        text-shadow: 0 0 20px #ff00ff, 0 0 50px #ff00ff;
         line-height: 1;
-        text-shadow: 0 0 10px #fff, 0 0 30px #ff00ff, 0 0 50px #ff00ff;
-        animation: pulse 2s infinite alternate;
+        margin: 20px 0;
+        text-align: center;
         position: relative;
         z-index: 10;
     }
 
-    @keyframes pulse {
-        from { transform: scale(1); text-shadow: 0 0 10px #fff, 0 0 30px #ff00ff; }
-        to { transform: scale(1.05); text-shadow: 0 0 20px #fff, 0 0 50px #ff00ff, 0 0 80px #ff00ff; }
-    }
-
     /* BOX BUON ANNO - FULL WIDTH NO WRAP */
     .custom-success-box {
-        background: rgba(0, 255, 65, 0.1);
-        border: 3px solid #00ff41;
-        box-shadow: 0 0 20px #00ff41;
+        background-color: rgba(0, 255, 65, 0.1);
+        border: 2px solid #00ff41;
         color: #00ff41;
-        border-radius: 15px;
+        border-radius: 12px;
         padding: 20px;
-        text-align: center;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(18px, 6vw, 42px);
-        font-weight: 900;
+        font-size: clamp(16px, 5.5vw, 40px);
+        font-weight: bold;
         text-shadow: 0 0 15px #00ff41;
-        margin: 20px auto;
         width: 100%;
-        white-space: nowrap;
+        text-align: center;
+        margin: 15px 0;
+        white-space: nowrap; /* Impedisce di andare a capo */
         position: relative;
         z-index: 10;
     }
 
     .terminal-text {
-        font-family: 'Fira Code', monospace; color: #00ff41; font-size: clamp(12px, 3vw, 15px);
-        background: rgba(0, 255, 65, 0.05); padding: 15px; border-left: 4px solid #00ff41; margin-bottom: 8px;
+        font-family: 'Fira Code', monospace; 
+        color: #00ff41; 
+        font-size: clamp(12px, 3vw, 15px);
+        background: rgba(0, 255, 65, 0.1); 
+        padding: 12px; 
+        border-left: 3px solid #00ff41; 
+        margin-bottom: 5px;
+        text-align: left;
     }
 
-    /* Matrix Rain */
-    .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.2; }
-    .bit { position: absolute; top: -30px; font-family: monospace; animation: fall linear infinite; }
+    /* Background FX */
+    .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
+    .bit { position: absolute; top: -30px; font-family: monospace; font-size: 18px; animation: fall linear infinite; }
     @keyframes fall { to { transform: translateY(110vh); } }
     
     div.stButton > button {
         background-color: transparent !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
-        font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 15px #ff00ff; height: 50px;
-        font-weight: bold;
+        font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 10px #ff00ff; height: 50px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -114,51 +116,47 @@ def play_audio(file_name, loop=False):
         components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
 
 def show_party_visuals():
-    # Pioggia Matrix di emoji
+    # Matrix Rain
     chars = ["0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
     rain_html = '<div class="matrix-rain">'
     for i in range(30):
         left = i * 3.3
-        rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; font-size:20px; animation-duration:{random.uniform(2,5)}s;">{random.choice(chars)}</div>'
+        rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; animation-duration:{random.uniform(2,5)}s;">{random.choice(chars)}</div>'
     st.markdown(rain_html + '</div>', unsafe_allow_html=True)
     
-    # Fuochi d'Artificio (Height=0 per rimuovere lo spazio bianco)
+    # Fuochi d'artificio che partono dal basso (Canvas fisso, altezza 0 per non creare buchi bianchi)
     components.html("""
     <canvas id="f" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:5;"></canvas>
     <script>
-    const c=document.getElementById('f'), ctx=c.getContext('2d');
-    function resize() { c.width=window.innerWidth; c.height=window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
-    
-    let particles=[], fireworks=[];
-    class Particle {
-        constructor(x,y,color,sx,sy){this.x=x;this.y=y;this.color=color;this.sx=sx;this.sy=sy;this.life=1.0;}
-        draw(){ctx.globalAlpha=this.life; ctx.fillStyle=this.color; ctx.beginPath(); ctx.arc(this.x,this.y,2.5,0,Math.PI*2); ctx.fill();}
-        update(){this.x+=this.sx;this.y+=this.sy;this.sy+=0.07;this.life-=0.02;}
-    }
+    const c=document.getElementById('f'), x=c.getContext('2d');
+    c.width=window.innerWidth; c.height=window.innerHeight;
+    let ps=[], fws=[];
     class Firework {
         constructor(){
-            this.x=Math.random()*c.width; this.y=c.height;
+            this.x=Math.random()*c.width; this.y=c.height; // Parte dal basso
             this.color=`hsl(${Math.random()*360},100%,60%)`;
-            this.sy=Math.random()*-5-8; this.sx=Math.random()*2-1; this.ex=false;
+            this.sy=Math.random()*-4-8; this.sx=Math.random()*2-1; this.ex=false;
         }
-        draw(){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,3.5,0,Math.PI*2);ctx.fill();}
-        update(){
-            this.x+=this.sx; this.y+=this.sy; this.sy+=0.12;
+        draw(){
+            x.fillStyle=this.color; x.beginPath(); x.arc(this.x,this.y,3.5,0,Math.PI*2); x.fill();
+            this.x+=this.sx; this.y+=this.sy; this.sy+=0.12; // Gravità
             if(this.sy>=-0.5){
                 this.ex=true;
                 for(let i=0;i<40;i++){
-                    const ang=Math.random()*Math.PI*2, spd=Math.random()*6+2;
-                    particles.push(new Particle(this.x,this.y,this.color,Math.cos(ang)*spd,Math.sin(ang)*spd));
+                    const a=Math.random()*Math.PI*2, s=Math.random()*6+2;
+                    ps.push({x:this.x,y:this.y,c:this.color,sx:Math.cos(a)*s,sy:Math.sin(a)*s,l:1});
                 }
             }
         }
     }
     function anim(){
-        ctx.clearRect(0,0,c.width,c.height);
-        if(Math.random()<0.04) fireworks.push(new Firework());
-        fireworks.forEach((f,i)=>{f.update();f.draw();if(f.ex)fireworks.splice(i,1);});
-        particles.forEach((p,i)=>{p.update();p.draw();if(p.life<=0)particles.splice(i,1);});
+        x.clearRect(0,0,c.width,c.height);
+        if(Math.random()<0.05) fws.push(new Firework());
+        fws=fws.filter(f=>{f.draw(); return !f.ex;});
+        ps=ps.filter(p=>{
+            x.globalAlpha=p.l; x.fillStyle=p.c; x.beginPath(); x.arc(p.x,p.y,2.5,0,Math.PI*2); x.fill();
+            p.x+=p.sx; p.y+=p.sy; p.sy+=0.06; p.l-=0.02; return p.l>0;
+        });
         requestAnimationFrame(anim);
     } anim();
     </script>""", height=0)
@@ -172,10 +170,10 @@ def main():
 
     if st.session_state.state == 'login':
         with main_placeholder.container():
-            st.markdown("<div class='pink-neon'>THE BACKDOOR</div>", unsafe_allow_html=True)
-            st.markdown("<div class='cyan-sub'>SECURE VIP ENTRANCE</div>", unsafe_allow_html=True)
+            st.markdown("<div class='center-box'><div class='pink-neon'>THE BACKDOOR</div><div class='cyan-sub'>SECURE VIP ENTRANCE</div></div>", unsafe_allow_html=True)
             st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
             play_audio("scena1.mp3", loop=True)
+            
             pwd = st.text_input("ACCESS KEY:", type="password", key="p_in")
             if st.button("AUTHORIZE ENTRANCE"):
                 if pwd.lower().strip() == "locandieri":
@@ -187,7 +185,7 @@ def main():
     elif st.session_state.state == 'hacking':
         with main_placeholder.container():
             play_audio("scena2.mp3", loop=False)
-            st.markdown("<div class='pink-neon'>OVERRIDING VIP SERVER...</div>", unsafe_allow_html=True)
+            st.markdown("<div class='center-box'><div class='pink-neon'>OVERRIDING VIP SERVER...</div></div>", unsafe_allow_html=True)
             log_area = st.empty()
             full_log = ""
             steps = [
@@ -208,19 +206,13 @@ def main():
             st.rerun()
 
     elif st.session_state.state == 'party':
-        # Qui vengono chiamati gli effetti (ora non occupano spazio)
         show_party_visuals()
-        
         with main_placeholder.container():
             play_audio("musica.mp3", loop=True)
-            
             if os.path.exists("ascii.png"): 
                 st.image("ascii.png", use_container_width=True)
             
-            # Titolo Gigante
             st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
-            
-            # Box Buon Anno
             st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
             
             if os.path.exists("foto.png"): 

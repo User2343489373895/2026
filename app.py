@@ -6,7 +6,7 @@ import random
 import streamlit.components.v1 as components
 
 # 1. Configurazione Iniziale (Deve essere la prima istruzione)
-st.set_page_config(page_title="Exclusive VIP Lounge 💎", page_icon="🔞", layout="centered")
+st.set_page_config(page_title="2026 UNLOCKED 💎", page_icon="🔞", layout="centered")
 
 # --- FUNZIONI AUDIO ---
 @st.cache_data
@@ -106,6 +106,12 @@ st.markdown("""
     
     /* Matrix Rain */
     @keyframes fall { to { transform: translateY(110vh); } }
+
+    /* Fuochi d'artificio */
+    @keyframes fireworks {
+        0% { opacity: 1; transform: translateY(0) scale(0.5); }
+        100% { opacity: 0; transform: translateY(-150vh) scale(1.5); }
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -153,101 +159,3 @@ elif st.session_state.state == 'hacking':
             time.sleep(t)
         
         st.session_state.state = 'party'
-        st.rerun()
-
-# --- SCENA 3: PARTY ---
-elif st.session_state.state == 'party':
-    # 1. Fuochi d'Artificio JS (Canvas fisso sullo sfondo)
-    components.html("""
-    <canvas id="canvas" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:999;"></canvas>
-    <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let w = canvas.width = window.innerWidth;
-    let h = canvas.height = window.innerHeight;
-    let fireworks = [];
-    let particles = [];
-
-    class Firework {
-        constructor() {
-            this.x = Math.random() * w;
-            this.y = h; // Parte dal basso
-            this.targetY = Math.random() * (h / 2.5);
-            this.speed = Math.random() * 3 + 4;
-            this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-            this.exploded = false;
-        }
-        update() {
-            this.y -= this.speed;
-            if (this.y <= this.targetY) {
-                this.exploded = true;
-                for (let i = 0; i < 40; i++) particles.push(new Particle(this.x, this.y, this.color));
-            }
-        }
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath(); ctx.arc(this.x, this.y, 3, 0, Math.PI * 2); ctx.fill();
-        }
-    }
-
-    class Particle {
-        constructor(x, y, color) {
-            this.x = x; this.y = y; this.color = color;
-            this.vel = { x: Math.random() * 6 - 3, y: Math.random() * 6 - 3 };
-            this.alpha = 1;
-        }
-        update() {
-            this.x += this.vel.x; this.y += this.vel.y;
-            this.vel.y += 0.05; // Gravità
-            this.alpha -= 0.015;
-        }
-        draw() {
-            ctx.globalAlpha = this.alpha;
-            ctx.fillStyle = this.color;
-            ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fill();
-        }
-    }
-
-    function loop() {
-        ctx.clearRect(0, 0, w, h);
-        if (Math.random() < 0.06) fireworks.push(new Firework());
-        fireworks = fireworks.filter(f => {
-            f.update(); f.draw();
-            return !f.exploded;
-        });
-        particles = particles.filter(p => {
-            p.update(); p.draw();
-            return p.alpha > 0;
-        });
-        requestAnimationFrame(loop);
-    }
-    loop();
-    window.onresize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
-    </script>
-    """, height=0)
-
-    # 2. Contenuto della Pagina
-    with placeholder.container():
-        play_audio("musica.mp3", loop=True)
-        
-        # Matrix Rain Emoji (Solo qui)
-        chars = ["0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
-        rain_html = '<div style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.3;">'
-        for i in range(25):
-            left = i * 4
-            rain_html += f'<div style="position:absolute; left:{left}%; top:-50px; color:#ff00ff; font-size:24px; animation: fall {random.uniform(2,5)}s linear infinite;">{random.choice(chars)}</div>'
-        st.markdown(rain_html + '</div>', unsafe_allow_html=True)
-
-        if os.path.exists("ascii.png"):
-            st.image("ascii.png", use_container_width=True)
-        
-        st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
-        
-        st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
-        
-        if os.path.exists("foto.png"):
-            st.image("foto.png", use_container_width=True)
-            
-        if st.button("TERMINATE CONNECTION"):
-            st.session_state.state = 'login'
-            st.rerun()

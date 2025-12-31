@@ -5,7 +5,7 @@ import base64
 import random
 import streamlit.components.v1 as components
 
-# 1. Configurazione (Deve essere la prima)
+# 1. Configurazione (Prima di tutto)
 st.set_page_config(page_title="Exclusive VIP Lounge 💎", page_icon="🔞", layout="centered")
 
 # --- CACHE AUDIO ---
@@ -18,55 +18,44 @@ def get_audio_b64(file_path):
         except: return None
     return None
 
-# --- CSS DEFINITIVO (PULITO E SENZA SPAZI VUOTI) ---
+def play_audio(file_name, loop=False):
+    b64 = get_audio_b64(file_name)
+    if b64:
+        loop_attr = "loop" if loop else ""
+        components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
+
+# --- CSS GLOBALE (Risolve Spazi e Allineamento) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Fira+Code&display=swap');
     
-    /* Rimuove lo spazio bianco in alto tipico di Streamlit */
-    .block-container { padding-top: 1rem !important; }
+    /* Rimuove lo spazio bianco in alto */
+    .block-container { padding-top: 0rem !important; }
     .stApp { background-color: #050505 !important; }
     header, footer, #MainMenu {visibility: hidden;}
-    
-    .center-box { text-align: center; width: 100%; display: block; margin: 0 auto; }
 
-    /* THE BACKDOOR (PINK) */
+    /* Titoli Hacker */
     .pink-neon { 
-        color: #ff00ff; 
-        text-shadow: 0 0 15px #ff00ff; 
-        font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(24px, 8vw, 60px); 
-        font-weight: 900; 
-        line-height: 1.2;
-        margin-bottom: 5px;
+        color: #ff00ff; text-shadow: 0 0 15px #ff00ff; 
+        font-family: 'Orbitron', sans-serif; font-size: clamp(24px, 8vw, 55px); 
+        font-weight: 900; text-align: center; margin-top: 20px;
     }
-
-    /* SECURE VIP ENTRANCE (CYAN) */
     .cyan-sub {
-        color: #00ffff;
-        text-shadow: 0 0 8px #00ffff;
-        font-family: 'Orbitron', sans-serif;
-        font-size: clamp(14px, 4vw, 22px);
-        font-weight: bold;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-top: 0;
+        color: #00ffff; text-shadow: 0 0 8px #00ffff;
+        font-family: 'Orbitron', sans-serif; font-size: clamp(12px, 4vw, 20px);
+        font-weight: bold; text-align: center; letter-spacing: 2px; text-transform: uppercase;
     }
 
-    /* 2026 UNLOCKED - GIGANTE */
+    /* 2026 UNLOCKED - Centrato e proporzionato */
     .unlocked-title {
-        color: white; 
-        font-family: 'Orbitron', sans-serif; 
-        font-size: clamp(40px, 15vw, 130px); 
-        text-shadow: 0 0 20px #ff00ff, 0 0 50px #ff00ff;
-        line-height: 1;
-        margin: 20px 0;
-        text-align: center;
-        position: relative;
-        z-index: 10;
+        color: white; font-family: 'Orbitron', sans-serif; 
+        font-size: clamp(38px, 12vw, 90px); 
+        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
+        font-weight: 900; text-align: center;
+        width: 100%; margin: 20px 0; line-height: 1.1;
     }
 
-    /* BOX BUON ANNO - FULL WIDTH NO WRAP */
+    /* BUON ANNO LOCANDIERI - Box robusto che non si storce */
     .custom-success-box {
         background-color: rgba(0, 255, 65, 0.1);
         border: 2px solid #00ff41;
@@ -74,121 +63,55 @@ st.markdown("""
         border-radius: 12px;
         padding: 20px;
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(16px, 5.5vw, 40px);
+        font-size: clamp(16px, 5vw, 32px);
         font-weight: bold;
-        text-shadow: 0 0 15px #00ff41;
+        text-shadow: 0 0 10px #00ff41;
         width: 100%;
+        max-width: 700px;
+        margin: 20px auto;
         text-align: center;
-        margin: 15px 0;
-        white-space: nowrap; /* Impedisce di andare a capo */
-        position: relative;
-        z-index: 10;
+        display: flex; justify-content: center; align-items: center;
+        box-sizing: border-box;
     }
 
     .terminal-text {
-        font-family: 'Fira Code', monospace; 
-        color: #00ff41; 
-        font-size: clamp(12px, 3vw, 15px);
-        background: rgba(0, 255, 65, 0.1); 
-        padding: 12px; 
-        border-left: 3px solid #00ff41; 
-        margin-bottom: 5px;
-        text-align: left;
+        font-family: 'Fira Code', monospace; color: #00ff41; font-size: 14px;
+        background: rgba(0, 255, 65, 0.05); padding: 12px; border-left: 3px solid #00ff41; 
+        margin-bottom: 5px; text-align: left;
     }
 
-    /* Background FX */
-    .matrix-rain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.3; }
-    .bit { position: absolute; top: -30px; font-family: monospace; font-size: 18px; animation: fall linear infinite; }
+    /* Animazione Fall */
     @keyframes fall { to { transform: translateY(110vh); } }
-    
-    div.stButton > button {
-        background-color: transparent !important; color: #ff00ff !important; border: 2px solid #ff00ff !important;
-        font-family: 'Orbitron', sans-serif !important; width: 100%; box-shadow: 0 0 10px #ff00ff; height: 50px;
-    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- FUNZIONI CORE ---
-def play_audio(file_name, loop=False):
-    b64 = get_audio_b64(file_name)
-    if b64:
-        loop_attr = "loop" if loop else ""
-        components.html(f"""<audio autoplay="true" {loop_attr}><source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>""", height=0)
+# --- LOGICA DI NAVIGAZIONE ---
+if 'state' not in st.session_state:
+    st.session_state.state = 'login'
 
-def show_party_visuals():
-    # Matrix Rain
-    chars = ["0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
-    rain_html = '<div class="matrix-rain">'
-    for i in range(30):
-        left = i * 3.3
-        rain_html += f'<div class="bit" style="left:{left}%; color:#ff00ff; animation-duration:{random.uniform(2,5)}s;">{random.choice(chars)}</div>'
-    st.markdown(rain_html + '</div>', unsafe_allow_html=True)
-    
-    # Fuochi d'artificio che partono dal basso (Canvas fisso, altezza 0 per non creare buchi bianchi)
-    components.html("""
-    <canvas id="f" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:5;"></canvas>
-    <script>
-    const c=document.getElementById('f'), x=c.getContext('2d');
-    c.width=window.innerWidth; c.height=window.innerHeight;
-    let ps=[], fws=[];
-    class Firework {
-        constructor(){
-            this.x=Math.random()*c.width; this.y=c.height; // Parte dal basso
-            this.color=`hsl(${Math.random()*360},100%,60%)`;
-            this.sy=Math.random()*-4-8; this.sx=Math.random()*2-1; this.ex=false;
-        }
-        draw(){
-            x.fillStyle=this.color; x.beginPath(); x.arc(this.x,this.y,3.5,0,Math.PI*2); x.fill();
-            this.x+=this.sx; this.y+=this.sy; this.sy+=0.12; // Gravità
-            if(this.sy>=-0.5){
-                this.ex=true;
-                for(let i=0;i<40;i++){
-                    const a=Math.random()*Math.PI*2, s=Math.random()*6+2;
-                    ps.push({x:this.x,y:this.y,c:this.color,sx:Math.cos(a)*s,sy:Math.sin(a)*s,l:1});
-                }
-            }
-        }
-    }
-    function anim(){
-        x.clearRect(0,0,c.width,c.height);
-        if(Math.random()<0.05) fws.push(new Firework());
-        fws=fws.filter(f=>{f.draw(); return !f.ex;});
-        ps=ps.filter(p=>{
-            x.globalAlpha=p.l; x.fillStyle=p.c; x.beginPath(); x.arc(p.x,p.y,2.5,0,Math.PI*2); x.fill();
-            p.x+=p.sx; p.y+=p.sy; p.sy+=0.06; p.l-=0.02; return p.l>0;
-        });
-        requestAnimationFrame(anim);
-    } anim();
-    </script>""", height=0)
+# Placeholder unico: pulisce TUTTO ad ogni cambio stato
+placeholder = st.empty()
 
-# --- LOGICA ---
-def main():
-    if 'state' not in st.session_state:
-        st.session_state.state = 'login'
+# --- 1. LOGIN ---
+if st.session_state.state == 'login':
+    with placeholder.container():
+        st.markdown("<div class='pink-neon'>THE BACKDOOR</div><div class='cyan-sub'>SECURE VIP ENTRANCE</div>", unsafe_allow_html=True)
+        st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
+        play_audio("scena1.mp3", loop=True)
+        pwd = st.text_input("ACCESS KEY:", type="password")
+        if st.button("AUTHORIZE ENTRANCE"):
+            if pwd.lower().strip() == "locandieri":
+                st.session_state.state = 'hacking'
+                st.rerun()
 
-    main_placeholder = st.empty()
-
-    if st.session_state.state == 'login':
-        with main_placeholder.container():
-            st.markdown("<div class='center-box'><div class='pink-neon'>THE BACKDOOR</div><div class='cyan-sub'>SECURE VIP ENTRANCE</div></div>", unsafe_allow_html=True)
-            st.image("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1fe56053-597e-45b3-a3b1-f26197574147/deb1dq7-6605a031-5944-49cc-8beb-dba5e8284c4a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8xZmU1NjA1My01OTdlLTQ1YjMtYTNiMS1mMjYxOTc1NzQxNDcvZGViMWRxNy02NjA1YTAzMS01OTQ0LTQ5Y2MtOGJlYi1kYmE1ZTgyODRjNGEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.QauebzGlSfy161JK86WvKTuhXb3OfmoXKdV7rOy-I8Y", use_container_width=True)
-            play_audio("scena1.mp3", loop=True)
-            
-            pwd = st.text_input("ACCESS KEY:", type="password", key="p_in")
-            if st.button("AUTHORIZE ENTRANCE"):
-                if pwd.lower().strip() == "locandieri":
-                    st.session_state.state = 'hacking'
-                    main_placeholder.empty()
-                    st.rerun()
-                else: st.error("ACCESS DENIED")
-
-    elif st.session_state.state == 'hacking':
-        with main_placeholder.container():
-            play_audio("scena2.mp3", loop=False)
-            st.markdown("<div class='center-box'><div class='pink-neon'>OVERRIDING VIP SERVER...</div></div>", unsafe_allow_html=True)
-            log_area = st.empty()
-            full_log = ""
-            steps = [
+# --- 2. HACKING ---
+elif st.session_state.state == 'hacking':
+    with placeholder.container():
+        play_audio("scena2.mp3")
+        st.markdown("<div class='pink-neon'>OVERRIDING VIP SERVER...</div>", unsafe_allow_html=True)
+        log_area = st.empty()
+        full_log = ""
+        logs = [
                 ("> Initializing 'Seductive_Handshake' protocol...", 1.2), 
                 ("> Bypassing IDS/IPS (Intrusion Desire System)...", 1.5), 
                 ("> Deep Packet Inspection of 'Private_Area'...", 1.8), 
@@ -196,32 +119,103 @@ def main():
                 ("> Extracting 'Secret_Payload.bin'...", 2.0), 
                 ("> SUCCESS: Access granted.", 1.2), 
                 ("> WELCOME!", 1.5)
-            ]
-            for text, delay in steps:
-                full_log += f"<div class='terminal-text'>{text}</div>"
-                log_area.markdown(full_log, unsafe_allow_html=True)
-                time.sleep(delay)
-            st.session_state.state = 'party'
-            main_placeholder.empty()
+        ]
+        for line, delay in logs:
+            full_log += f"<div class='terminal-text'>{line}</div>"
+            log_area.markdown(full_log, unsafe_allow_html=True)
+            time.sleep(delay)
+        st.session_state.state = 'party'
+        st.rerun()
+
+# --- 3. PARTY (PAGINA FINALE) ---
+elif st.session_state.state == 'party':
+    # VISUALS (Fuochi + Pioggia) - Caricati solo qui dentro
+    components.html("""
+    <div id="visuals" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:9999;">
+        <canvas id="fw"></canvas>
+    </div>
+    <script>
+    const canvas = document.getElementById('fw');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    let particles = [];
+    let rockets = [];
+
+    class Rocket {
+        constructor() {
+            this.x = Math.random() * w;
+            this.y = h; // Parte esattamente dal basso
+            this.sy = Math.random() * -3 - 8; // Velocità verso l'alto
+            this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        }
+        update() {
+            this.y += this.sy;
+            this.sy += 0.1; // Gravità che rallenta il razzo
+            if (this.sy >= 0) { // Al culmine esplode
+                for(let i=0; i<40; i++) particles.push(new Particle(this.x, this.y, this.color));
+                return false;
+            }
+            return true;
+        }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath(); ctx.arc(this.x, this.y, 3, 0, Math.PI*2); ctx.fill();
+        }
+    }
+
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x; this.y = y; this.color = color;
+            this.dx = Math.random() * 6 - 3;
+            this.dy = Math.random() * 6 - 3;
+            this.alpha = 1;
+        }
+        update() {
+            this.x += this.dx; this.y += this.dy;
+            this.dy += 0.05; this.alpha -= 0.015;
+        }
+        draw() {
+            ctx.globalAlpha = this.alpha;
+            ctx.fillStyle = this.color;
+            ctx.beginPath(); ctx.arc(this.x, this.y, 2.5, 0, Math.PI*2); ctx.fill();
+        }
+    }
+
+    function anim() {
+        ctx.clearRect(0, 0, w, h);
+        if (Math.random() < 0.06) rockets.push(new Rocket());
+        rockets = rockets.filter(r => { r.draw(); return r.update(); });
+        particles = particles.filter(p => { p.draw(); p.update(); return p.alpha > 0; });
+        requestAnimationFrame(anim);
+    }
+    anim();
+    </script>
+    """, height=0)
+
+    with placeholder.container():
+        # Pioggia Emoji (Renderizzata SOLO qui)
+        chars = [""0", "1", "🥂", "🍸","🚬", "✨", "💎", "💰", "🍑", "🔞" , "2", "0", "2", "6"]
+        rain_html = '<div style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.3;">'
+        for i in range(25):
+            left = i * 4
+            rain_html += f'<div style="position:absolute; left:{left}%; top:-50px; color:#ff00ff; font-size:24px; animation: fall {random.uniform(2,5)}s linear infinite;">{random.choice(chars)}</div>'
+        st.markdown(rain_html + "</div>", unsafe_allow_html=True)
+
+        play_audio("musica.mp3", loop=True)
+        
+        if os.path.exists("ascii.png"):
+            st.image("ascii.png", use_container_width=True)
+        
+        # 2026 UNLOCKED
+        st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
+        
+        # BUON ANNO LOCANDIERI
+        st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
+        
+        if os.path.exists("foto.png"):
+            st.image("foto.png", use_container_width=True)
+            
+        if st.button("TERMINATE CONNECTION"):
+            st.session_state.state = 'login'
             st.rerun()
-
-    elif st.session_state.state == 'party':
-        show_party_visuals()
-        with main_placeholder.container():
-            play_audio("musica.mp3", loop=True)
-            if os.path.exists("ascii.png"): 
-                st.image("ascii.png", use_container_width=True)
-            
-            st.markdown("<div class='unlocked-title'>2026 UNLOCKED</div>", unsafe_allow_html=True)
-            st.markdown("<div class='custom-success-box'>🥂 BUON ANNO, LOCANDIERI! 🥂</div>", unsafe_allow_html=True)
-            
-            if os.path.exists("foto.png"): 
-                st.image("foto.png", use_container_width=True)
-            
-            if st.button("TERMINATE CONNECTION"):
-                st.session_state.state = 'login'
-                main_placeholder.empty()
-                st.rerun()
-
-if __name__ == "__main__":
-    main()
